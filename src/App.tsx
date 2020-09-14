@@ -1,23 +1,30 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import axios from "axios";
+
+interface IHelloWorldData {
+  status: string;
+  message: string;
+}
 
 function App() {
+  const [data, setData] = useState<IHelloWorldData | null>(null);
+
+  useEffect(() => {
+    const getData = async () => {
+      const fetchedData = await axios.get("http://api.carparker.tk/api/v1/status");
+      setData(fetchedData.data);
+    };
+    getData();
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        {data && <p>{data.status}</p>}
+        {data && <p>{data.message}</p>}
       </header>
     </div>
   );
