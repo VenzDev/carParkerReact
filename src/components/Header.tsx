@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from "react";
 import styled from "styled-components";
 import logo from "../assets/logo.png";
+import { useTranslation } from "react-i18next";
 
 const StyledHeader = styled.header`
   height: 50px;
@@ -20,6 +21,11 @@ const FlexDiv = styled.div`
 
   button {
     margin-right: 6rem;
+  }
+
+  > p {
+    margin-right: 3rem;
+    color: white;
   }
 `;
 
@@ -70,15 +76,33 @@ const RegisterButton = styled.button`
   }
 `;
 
+const LocalBtn = styled.span`
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
 const Header: FunctionComponent = () => {
+  const { t, i18n } = useTranslation();
+
+  const changeLanguage = (language: string) => {
+    i18n.changeLanguage(language);
+  };
+
   return (
     <StyledHeader>
       <FlexDiv>
         <LogoImg src={logo} alt="logo" />
         <LogoText>Parker</LogoText>
         <div></div>
-        <LoginButton>Login</LoginButton>
-        <RegisterButton>Register</RegisterButton>
+        <LoginButton>{t("login")}</LoginButton>
+        <RegisterButton>{t("register")}</RegisterButton>
+        <p>
+          <LocalBtn onClick={() => changeLanguage("en")}>EN</LocalBtn>
+          <span>/</span>
+          <LocalBtn onClick={() => changeLanguage("pl")}>PL</LocalBtn>
+        </p>
       </FlexDiv>
     </StyledHeader>
   );

@@ -1,8 +1,9 @@
-import React, { FunctionComponent, useEffect } from "react";
+import React, { FunctionComponent } from "react";
 import WaveDark from "../assets/wave1.svg";
 import WaveLight from "../assets/wave2.svg";
 import SmartParking from "../assets/smartParking.png";
 import styled, { keyframes } from "styled-components";
+import { useTranslation } from "react-i18next";
 
 const carParkingAnim = keyframes`
   from {
@@ -94,24 +95,17 @@ const Div = styled.div`
 export interface HomeProps {}
 
 const Home: FunctionComponent<HomeProps> = () => {
-  useEffect(() => {
-    const img = new Image();
-    img.src = WaveDark;
-    const img2 = new Image();
-    img2.src = WaveLight;
-  });
+  const { t } = useTranslation();
+
   return (
     <>
       <WaveImgDark src={WaveLight} alt="wave" />
       <WaveImgLight src={WaveDark} alt="wave" />
       <SmartParkingImg src={SmartParking} alt="smartParking" />
       <Div>
-        <p>Smart car parking reservation</p>
-        <span>
-          Changing the way you park with our smart parking solution based on the RFID technology. Our automated car
-          parking system is best suited for office buildings, gated communities, apartments, malls and hospitals.
-        </span>
-        <button>Try now</button>
+        <p>{t("description")}</p>
+        <span>{t("text")}</span>
+        <button>{t("trynow")}</button>
       </Div>
     </>
   );
