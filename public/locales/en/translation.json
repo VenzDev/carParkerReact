@@ -2,6 +2,31 @@
   "description": "Smart car parking reservation",
   "text": "Changing the way you park with our smart parking solution based on the RFID technology. Our automated car parking system is best suited for office building, gated communities, apartments, mails and hospitals",
   "trynow": "Try now",
+  "home": "home",
   "login": "Login",
-  "register": "Register"
+  "register": "Register",
+
+  "registerPage": {
+    "createAccount": "Create account",
+    "alreadyHave": "Already have an account?",
+    "login": "Sign in.",
+    "fullName": "Full name",
+    "fullNameExample": "John Smith",
+    "emailExample": "john@smith.com",
+    "passwordExample": "Your stron password",
+    "confirmPasswordExample": "Repeat password",
+    "password": "password",
+    "email": "Email",
+    "confirmPassword": "Confrim password"
+  },
+
+  "loginPage": {
+    "login": "Login",
+    "notHave": "Don't have an account?",
+    "register": "Create account.",
+    "email": "Email",
+    "password": "Password",
+    "emailExample": "john@smith.com",
+    "passwordExample": "Your password"
+  }
 }

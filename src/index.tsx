@@ -3,13 +3,16 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import "./styles/normalize.css";
 import * as serviceWorker from "./serviceWorker";
+import { BrowserRouter as Router } from "react-router-dom";
 
 import "./i18n";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Suspense fallback={<div></div>}>
-      <App />
+    <Suspense fallback={<div />}>
+      <Router>
+        <App />
+      </Router>
     </Suspense>
   </React.StrictMode>,
   document.getElementById("root")

@@ -2,6 +2,31 @@
   "description": "Smart system rezerwacji miejsc parkingowych",
   "text": "Rewolucja w sposobie rezerwacji miejsc parkingowych oparta na technologii RFID. Nasz zautomatyzowany system parkingowy najlepiej nadaje się do budynków biurowych, osiedli zamkniętych, mieszkań, centrów handlowych i szpitali.",
   "trynow": "Sprawdź",
+  "home": "Strona główna",
   "login": "Zaloguj się",
-  "register": "Zarejestruj się"
+  "register": "Zarejestruj się",
+
+  "registerPage": {
+    "createAccount": "Utwórz konto",
+    "alreadyHave": "Masz już konto?",
+    "login": "zaloguj się.",
+    "fullName": "Imię i nazwisko",
+    "fullNameExample": "Jan Kowalski",
+    "emailExample": "jan@kowalski.pl",
+    "passwordExample": "Twoje silne hasło",
+    "confirmPasswordExample": "Powtórz hasło",
+    "password": "Hasło",
+    "email": "Email",
+    "confirmPassword": "Potwierdź Hasło"
+  },
+
+  "loginPage": {
+    "login": "Zaloguj się",
+    "notHave": "Nie masz konta?",
+    "register": "Utwórz konto.",
+    "email": "Email",
+    "password": "Hasło",
+    "emailExample": "jan@kowalski.pl",
+    "passwordExample": "Twoje hasło"
+  }
 }
