@@ -4,6 +4,7 @@ export const theme = {
   color: {
     blueDark: "#0080ff",
     blueLight: "#00d3ff",
+    lightAqua: "#edf7ff",
     white: "white",
   },
   gradient: {

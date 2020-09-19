@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React from "react";
 import { Switch, Route } from "react-router-dom";
 import Wrapper from "./components/Wrapper";
 import Home from "./pages/Home";
@@ -10,17 +10,14 @@ import Account from "./pages/Account";
 import Support from "./pages/Support";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./styles/theme";
-
-const Wrapper2: FunctionComponent = ({ children }) => {
-  return <div style={{ backgroundColor: "red" }}>Here wrapper 2{children}</div>;
-};
+import DashboardWrapper from "./components/DashboardWrapper";
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <Switch>
         <Route path="/dashboard">
-          <Wrapper2>
+          <DashboardWrapper>
             <Route exact path="/dashboard">
               <Dashboard />
             </Route>
@@ -33,7 +30,7 @@ function App() {
             <Route exact path="/dashboard/support">
               <Support />
             </Route>
-          </Wrapper2>
+          </DashboardWrapper>
         </Route>
         <Route path="/">
           <Wrapper>

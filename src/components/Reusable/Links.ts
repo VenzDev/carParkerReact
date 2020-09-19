@@ -16,10 +16,6 @@ export const StyledLink = styled(Link)`
 export const StyledNavLink = styled(NavLink)`
   text-decoration: none;
 
-  &.active {
-    text-decoration: underline !important;
-  }
-
   &:visited,
   &:active,
   &:link,
