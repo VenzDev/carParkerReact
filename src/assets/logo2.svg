@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="318" height="318" viewBox="0 0 318 318">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#10007e"/>
+      <stop offset="1" stop-color="#00dcff"/>
+    </linearGradient>
+  </defs>
+  <path id="Icon_awesome-parking" data-name="Icon awesome-parking" d="M283.929,2.25H34.071A34.08,34.08,0,0,0,0,36.321V286.179A34.08,34.08,0,0,0,34.071,320.25H283.929A34.08,34.08,0,0,0,318,286.179V36.321A34.08,34.08,0,0,0,283.929,2.25ZM170.357,206.679H136.286V240.75a11.391,11.391,0,0,1-11.357,11.357H102.214A11.391,11.391,0,0,1,90.857,240.75v-159a11.391,11.391,0,0,1,11.357-11.357h68.143a68.143,68.143,0,0,1,0,136.286Zm0-90.857H136.286V161.25h34.071a22.714,22.714,0,1,0,0-45.429Z" transform="translate(0 -2.25)" fill="url(#linear-gradient)"/>
+</svg>

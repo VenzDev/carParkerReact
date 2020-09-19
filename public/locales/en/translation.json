@@ -13,7 +13,7 @@
     "fullName": "Full name",
     "fullNameExample": "John Smith",
     "emailExample": "john@smith.com",
-    "passwordExample": "Your stron password",
+    "passwordExample": "Your strong password",
     "confirmPasswordExample": "Repeat password",
     "password": "password",
     "email": "Email",

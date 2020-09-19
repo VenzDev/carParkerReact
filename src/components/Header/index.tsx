@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
-import logo from "../../assets/logo.png";
+import logo from "../../assets/logo3.svg";
 import { useTranslation } from "react-i18next";
 import MenuButton from "./MenuButton";
 import { StyledHeader, FlexDiv, LogoImg, LogoText, LoginButton, RegisterButton, LangBtn, Fill } from "./styles";

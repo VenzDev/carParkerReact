@@ -1,5 +1,6 @@
 import { Button } from "../../components/Button";
-import styled, { keyframes } from "styled-components";
+import { keyframes } from "styled-components";
+import { styled } from "../../styles/theme";
 
 export const carParkingAnim = keyframes`
   from {
@@ -125,7 +126,7 @@ export const HomeText = styled.div`
   }
 
   p {
-    color: #006fff;
+    color: ${({ theme }) => theme.color.blueDark};
     font-size: 3rem;
 
     @media (max-width: 1400px) {
@@ -139,7 +140,7 @@ export const HomeText = styled.div`
   }
 
   span {
-    color: #00d3ff;
+    color: ${({ theme }) => theme.color.blueLight};
     line-height: 150%;
     text-align: justify;
 
@@ -152,9 +153,9 @@ export const HomeText = styled.div`
 
 export const TrynowButton = styled(Button)`
   margin: 5rem auto;
-  color: white;
-  background: #0080ff;
-  background-image: linear-gradient(to right, #0080ff, #0098ff, #00aeff, #00c1ff, #00d3ff);
+  color: ${({ theme }) => theme.color.white};
+  background: ${({ theme }) => theme.color.blueDark};
+  background-image: ${({ theme }) => theme.gradient.toRight};
   box-shadow: 0px 6px 12px rgba(0, 128, 255, 0.5);
 
   @media (max-width: 900px) {

@@ -1,6 +1,10 @@
 import { HeaderButton } from "../Button";
-import styled from "styled-components";
+import { styled } from "../../styles/theme";
 import { motion } from "framer-motion";
+
+interface Active {
+  active: boolean;
+}
 
 export const StyledHeader = styled.header`
   height: 50px;
@@ -28,12 +32,8 @@ export const Fill = styled.div`
   flex-grow: 1;
 `;
 
-interface Iicons {
-  active: boolean;
-}
-
-export const Icons = styled.div`
-  color: ${({ active }: Iicons) => (active ? "blue" : "white")};
+export const Icons = styled.div<Active>`
+  color: ${({ active, theme }) => (active ? theme.color.blueDark : theme.color.white)};
   margin-right: 1rem;
   display: none;
   cursor: pointer;
@@ -47,7 +47,7 @@ export const Icons = styled.div`
 export const SideNavbarContainer = styled.div`
   margin: 3rem;
   margin-top: 0;
-  color: blue;
+  color: ${({ theme }) => theme.color.blueDark};
 
   > a {
     text-decoration: none;
@@ -85,26 +85,22 @@ export const LogoImg = styled.img`
   height: 40px;
 `;
 
-interface ILogoText {
-  active: boolean;
-}
-
-export const LogoText = styled.h2`
+export const LogoText = styled.h2<Active>`
   margin-left: 0.5rem;
-  color: ${({ active }: ILogoText) => (active ? "blue" : "white")};
+  color: ${({ active, theme }) => (active ? theme.color.blueDark : theme.color.white)};
   letter-spacing: 2px;
   font-size: 1.7rem;
 `;
 
 export const LoginButton = styled(HeaderButton)`
-  color: white;
+  color: ${({ theme }) => theme.color.white};
   background-color: transparent;
   border: 2px solid white;
 `;
 
 export const RegisterButton = styled(HeaderButton)`
-  color: #0080ff;
-  background-color: white;
+  color: ${({ theme }) => theme.color.blueDark};
+  background-color: ${({ theme }) => theme.color.white};
 `;
 
 export const LangBtn = styled.span`
@@ -124,7 +120,7 @@ export const Navbar = styled(motion.div)`
   width: 80%;
   height: 100%;
   box-shadow: 5px 0 5px -5px rgba(0, 0, 0, 0.1);
-  background-color: white;
+  background-color: ${({ theme }) => theme.color.white};
   transition: 0.2s;
   z-index: 2;
 `;
