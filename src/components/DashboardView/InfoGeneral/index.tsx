@@ -4,6 +4,7 @@ import { styled } from "../../../styles/theme";
 const InfoWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
 `;
 
 const Info = styled.div`
@@ -15,10 +16,36 @@ const Info = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
+
+  @media (max-width: 1600px) {
+    padding: 0.5rem;
+  }
+
+  @media (max-width: 1400px) {
+    padding: 1rem;
+  }
+
+  @media (max-width: 1100px) {
+    flex: 0 0 49%;
+    margin-bottom: 0.5rem;
+  }
+
+  @media (max-width: 500px) {
+    height: 100px;
+  }
 `;
 
 const InfoContent = styled.div`
   flex: 0 0 60%;
+
+  @media (max-width: 500px) {
+    > h2 {
+      font-size: 1rem;
+    }
+    > p {
+      font-size: 0.8rem;
+    }
+  }
 `;
 
 const InfoIcon = styled.div`
@@ -31,6 +58,12 @@ const InfoIcon = styled.div`
   height: 75px;
   background-color: rgba(0, 128, 255, 0.3);
   border-radius: 50%;
+
+  @media (max-width: 500px) {
+    flex: 0 0 50px;
+    height: 50px;
+    font-size: 1rem;
+  }
 `;
 
 const InfoGeneral: FunctionComponent = () => {
@@ -38,7 +71,7 @@ const InfoGeneral: FunctionComponent = () => {
     <InfoWrapper>
       <Info>
         <InfoContent>
-          <h2>14:23</h2>
+          <h2>{`${new Date().getHours()}:${new Date().getMinutes()}`}</h2>
           <p>Current time</p>
         </InfoContent>
         <InfoIcon>

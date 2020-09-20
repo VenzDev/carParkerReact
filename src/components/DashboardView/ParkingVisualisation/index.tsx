@@ -9,6 +9,34 @@ const ParkingWrapper = styled.div`
   box-shadow: 2px 6px 12px rgba(0, 0, 0, 0.05);
   border-radius: 16px;
   position: relative;
+
+  @media (max-width: 1100px) {
+    width: 600px;
+  }
+
+  @media (max-width: 950px) {
+    width: 700px;
+  }
+
+  @media (max-width: 800px) {
+    width: 600px;
+  }
+
+  @media (max-width: 700px) {
+    width: 500px;
+  }
+
+  @media (max-width: 600px) {
+    width: 400px;
+  }
+
+  @media (max-width: 500px) {
+    width: 380px;
+  }
+
+  @media (max-width: 400px) {
+    width: 340px;
+  }
 `;
 const Slots = styled.div`
   padding: 10px;
@@ -26,6 +54,21 @@ const Slot = styled.div`
   justify-content: center;
   color: white;
   font-size: 1.5rem;
+
+  @media (max-width: 1100px) {
+    flex: 0 0 50px;
+  }
+
+  @media (max-width: 600px) {
+    height: 60px;
+    flex: 0 0 40px;
+    border-radius: 6px;
+  }
+
+  @media (max-width: 500px) {
+    height: 50px;
+    flex: 0 0 30px;
+  }
 `;
 
 const SlotFree = styled(Slot)`
@@ -51,6 +94,18 @@ const SlotReserved = styled(Slot)`
 
 const SlotSpace = styled.div`
   height: 75px;
+
+  @media (max-width: 1100px) {
+    height: 50px;
+  }
+
+  @media (max-width: 600px) {
+    height: 25px;
+  }
+
+  @media (max-width: 400px) {
+    height: 20px;
+  }
 `;
 const SlotsHalf = styled.div`
   flex: 0 0 49%;
@@ -67,6 +122,22 @@ const SlotHorizontal = styled.div`
   justify-content: center;
   color: white;
   font-size: 1.5rem;
+
+  @media (max-width: 1100px) {
+    flex: 0 0 75px;
+    height: 50px;
+  }
+
+  @media (max-width: 600px) {
+    flex: 0 0 60px;
+    height: 40px;
+    border-radius: 6px;
+  }
+
+  @media (max-width: 400px) {
+    flex: 0 0 50px;
+    height: 30px;
+  }
 `;
 
 const SlotHorizontalFree = styled(SlotHorizontal)`
@@ -95,6 +166,14 @@ const Exchange = styled.div`
   right: 20px;
   top: 180px;
   font-size: 1.5rem;
+
+  @media (max-width: 600px) {
+    top: 110px;
+  }
+
+  @media (max-width: 400px) {
+    top: 100px;
+  }
 `;
 
 const ParkingVisualisation: FunctionComponent = () => {

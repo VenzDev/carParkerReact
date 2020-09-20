@@ -10,6 +10,10 @@ const SidebarWrapper = styled.div`
   flex-direction: column;
   background: ${({ theme }) => theme.color.blueLight};
   background-image: ${({ theme }) => theme.gradient.toBottom};
+
+  @media (max-width: 950px) {
+    display: none;
+  }
 `;
 const Grow = styled.div`
   flex-grow: 1;
@@ -61,6 +65,14 @@ const NavItem = styled.div`
   i {
     width: 50px;
   }
+
+  @media (max-width: 1400px) {
+    font-size: 1rem;
+  }
+
+  @media (max-width: 1200px) {
+    margin-left: 10%;
+  }
 `;
 
 const Copyright = styled.div`
@@ -70,7 +82,7 @@ const Copyright = styled.div`
   padding: 1rem;
 `;
 
-const Sidebar: FunctionComponent = ({ children }) => {
+const Sidebar: FunctionComponent = () => {
   return (
     <SidebarWrapper>
       <Flex>

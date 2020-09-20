@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from "react";
 import styled from "styled-components";
+import logo from "../../assets/logo3.svg";
 
 const HeaderWrapper = styled.div`
   position: fixed;
@@ -13,6 +14,15 @@ const HeaderWrapper = styled.div`
   box-shadow: 2px 6px 12px rgba(0, 0, 0, 0.1);
   background-color: white;
   z-index: 10;
+
+  @media (max-width: 950px) {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  @media (max-width: 600px) {
+    padding: 0 1rem;
+  }
 `;
 
 const Flex = styled.div`
@@ -34,10 +44,32 @@ const Arrow = styled.div`
   color: white;
 `;
 
+const LogoImg = styled.img`
+  display: none;
+  width: 40px;
+  height: 40px;
+
+  @media (max-width: 950px) {
+    display: block;
+  }
+`;
+
+const H2 = styled.h2`
+  font-weight: 200;
+  margin-left: 1rem;
+
+  @media (max-width: 600px) {
+    display: none;
+  }
+`;
+
 const Header: FunctionComponent = () => {
   return (
     <HeaderWrapper>
-      <h2 style={{ fontWeight: 200 }}>Hello, John</h2>
+      <Flex>
+        <LogoImg src={logo} alt="logo" />
+        <H2>Hello, John</H2>
+      </Flex>
       <Flex>
         <p>John Smith</p>
         <Arrow>

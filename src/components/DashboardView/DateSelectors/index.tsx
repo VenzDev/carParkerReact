@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState, useEffect } from "react";
 import styled from "styled-components";
 import DateFnsUtils from "@date-io/date-fns";
 import { KeyboardTimePicker, KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -13,6 +13,7 @@ const TimerDiv = styled.div`
   box-shadow: 2px 6px 12px rgba(0, 0, 0, 0.05);
   padding: 1rem;
   border-radius: 12px;
+  flex-wrap: wrap;
 `;
 
 const H2 = styled.h2`
@@ -20,11 +21,55 @@ const H2 = styled.h2`
   margin-left: 2rem;
 `;
 
+const Order = styled.div`
+  @media (max-width: 1200px) {
+    order: 1;
+  }
+`;
+
+const dateWithoutMinutes = (): Date => {
+  const date = new Date();
+  date.setMinutes(0);
+  date.setHours(date.getHours() + 1);
+  return date;
+};
+
+const dateWithCustomMinutes = (): Date => {
+  const date = dateWithoutMinutes();
+  date.setMinutes(45);
+  return date;
+};
+
 const DateSelectors: FunctionComponent = () => {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date("2020-09-19T14:00:00"));
+  const [date, setDate] = useState<Date | null>(new Date());
+  const [startHour, setStartHour] = useState<Date | null>(dateWithoutMinutes());
+  const [endHour, setEndHour] = useState<Date | null>(dateWithCustomMinutes());
+  const [isError, setError] = useState(false);
+
+  useEffect(() => {
+    const validateHours = () => {
+      if (startHour && startHour.getHours() <= new Date().getHours()) {
+        setError(true);
+      } else if (startHour && endHour && startHour?.getHours() > endHour?.getHours()) {
+        setError(true);
+      } else setError(false);
+    };
+
+    validateHours();
+  }, [startHour, endHour]);
 
   const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date);
+    setDate(date);
+  };
+
+  const handleStartHour = (date: Date | null) => {
+    date?.setMinutes(0);
+    setStartHour(date);
+  };
+
+  const handleEndHour = (date: Date | null) => {
+    date?.setMinutes(45);
+    setEndHour(date);
   };
 
   return (
@@ -32,38 +77,46 @@ const DateSelectors: FunctionComponent = () => {
       <H2>Reserve parking space</H2>
       <TimerDiv>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
-            disablePast={true}
-            margin="normal"
-            id="date-picker-dialog"
-            label="Select date"
-            format="MM/dd/yyyy"
-            value={selectedDate}
-            onChange={handleDateChange}
-            KeyboardButtonProps={{
-              "aria-label": "change date",
-            }}
-          />
+          <Order>
+            <KeyboardDatePicker
+              disablePast={true}
+              margin="normal"
+              id="date-picker-dialog"
+              label="Select date"
+              format="MM/dd/yyyy"
+              value={date}
+              onChange={handleDateChange}
+              KeyboardButtonProps={{
+                "aria-label": "change date",
+              }}
+            />
+          </Order>
           <KeyboardTimePicker
             margin="normal"
             id="time-picker"
             label="Start time"
-            value={selectedDate}
-            onChange={handleDateChange}
+            value={startHour}
+            onChange={handleStartHour}
             ampm={false}
             views={["hours"]}
             KeyboardButtonProps={{
               "aria-label": "change time",
             }}
+            error={isError}
+            helperText={isError && "Invalid hours"}
           />
           <KeyboardTimePicker
             margin="normal"
             id="time-picker"
             label="End time"
-            value={selectedDate}
-            onChange={handleDateChange}
+            value={endHour}
+            onChange={handleEndHour}
             ampm={false}
+            error={isError}
+            helperText={isError && "Invalid hours"}
             views={["hours"]}
+            cancelLabel="Anuluj"
+            okLabel="Potwierdź"
             KeyboardButtonProps={{
               "aria-label": "change time",
             }}
