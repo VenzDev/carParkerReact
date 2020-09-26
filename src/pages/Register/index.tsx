@@ -1,126 +1,93 @@
-import React, { FunctionComponent } from "react";
-import styled, { keyframes } from "styled-components";
+import React, { FunctionComponent, useState, FormEvent } from "react";
 import registerImg from "../../assets/registerImg.svg";
-import { GradientButton } from "../../components/Button";
-import { StyledLink } from "../../components/Reusable/Links";
 import { useTranslation } from "react-i18next";
+import {
+  Wrapper,
+  RegisterContent,
+  RegisterForm,
+  RegisterDesc,
+  Input,
+  InputDesc,
+  GradientButtonCenter,
+  Divider,
+  RegisterImage,
+  StyledLinkBlue,
+  ErrorMessage,
+  ApiError,
+} from "./styles";
+import { register } from "../../api/Api";
+import { RegisterData } from "../../features/types";
+import { withRouter, RouteComponentProps } from "react-router-dom";
+import { validInputs } from "../../utils/validators/validateRegister";
+import Spinner from "../../components/Reusable/Spinner";
+import { LOGIN, setToast } from "../../utils/toast";
 
-const Wrapper = styled.div`
-  width: 100%;
-  height: 100%;
-  background: #00d3ff;
-  background-image: linear-gradient(to bottom, #0080ff, #0098ff, #00aeff, #00c1ff, #00d3ff);
-`;
+interface IProps extends RouteComponentProps {}
 
-const opacity = keyframes`
-  from {
-    opacity:0;
-  }
+interface Error {
+  fullName: string | null;
+  email: string | null;
+  password: string | null;
+  confirmPassword: string | null;
+  api: string | null;
+}
 
-  to {
-    opacity:1;
-  }
-`;
-
-const RegisterContent = styled.div`
-  position: absolute;
-  top: 52%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 70%;
-  border-radius: 23px;
-  background-color: white;
-  display: flex;
-
-  @media (max-width: 1200px) {
-    width: 90%;
-  }
-
-  @media (max-width: 500px) {
-    top: 55%;
-  }
-`;
-
-const RegisterForm = styled.div`
-  flex: 0 0 50%;
-  padding: 2rem;
-
-  @media (max-width: 850px) {
-    flex: 0 0 100%;
-  }
-`;
-
-const RegisterImage = styled.div`
-  flex: 0 0 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  @media (max-width: 850px) {
-    display: none;
-  }
-
-  > img {
-    width: 90%;
-    animation: ${opacity} 0.2s ease-out;
-  }
-`;
-
-const Divider = styled.div`
-  position: absolute;
-  top: 0;
-  left: 50%;
-  height: 100%;
-  width: 1px;
-  background-color: lightgray;
-
-  @media (max-width: 850px) {
-    display: none;
-  }
-`;
-
-const Input = styled.input`
-  width: 100%;
-  height: 35px;
-  border-radius: 23px;
-  border: none;
-  background-color: #f5f5f5;
-  outline: none;
-  text-indent: 1rem;
-  margin-bottom: 1.5rem;
-`;
-
-const InputDesc = styled.p`
-  margin: 0;
-  padding: 0;
-  padding-left: 1rem;
-  padding-bottom: 5px;
-
-  @media (max-width: 500px) {
-    font-size: 0.8rem;
-  }
-`;
-
-const RegisterDesc = styled.div`
-  text-align: center;
-  margin-bottom: 1rem;
-`;
-
-const GradientButtonCenter = styled(GradientButton)`
-  margin: 2rem auto;
-  display: block;
-
-  @media (max-width: 500px) {
-    margin: 1rem auto;
-  }
-`;
-
-const StyledLinkBlue = styled(StyledLink)`
-  color: blue !important;
-`;
-
-const Register: FunctionComponent = () => {
+const Register: FunctionComponent<IProps> = ({ history }) => {
   const { t } = useTranslation();
+  const [data, setData] = useState<RegisterData>({ name: "", email: "", password: "", password_confirmation: "" });
+  const [isShakeWhenApiError, setShakeWhenApiError] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<Error>({
+    fullName: null,
+    email: null,
+    password: null,
+    confirmPassword: null,
+    api: null,
+  });
+
+  const removeSpacesFromInputs = () => {
+    setData({
+      name: data.name.trim(),
+      email: data.email.trim(),
+      password: data.password.trim(),
+      password_confirmation: data.password_confirmation.trim(),
+    });
+  };
+
+  const redirectToLogin = () => {
+    setToast(LOGIN, "Successfully registered, now you can login");
+    history.push("/login");
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    removeSpacesFromInputs();
+
+    if (validInputs(data)) {
+      console.log(data);
+      try {
+        await register(data);
+        redirectToLogin();
+      } catch (e) {
+        setShakeWhenApiError(true);
+        if (e.response) {
+          setLoading(false);
+          setErrorMessage({ ...errorMessage, api: e.response.data.message });
+        } else setErrorMessage({ ...errorMessage, api: e.message });
+      }
+    }
+  };
+
+  const handleInput = (e: FormEvent<HTMLInputElement>) => {
+    const { value, name } = e.currentTarget;
+
+    setData({ ...data, [name]: value });
+  };
+
+  const handleClick = () => {
+    setShakeWhenApiError(false);
+    setLoading(true);
+  };
 
   return (
     <Wrapper>
@@ -132,25 +99,44 @@ const Register: FunctionComponent = () => {
               {t("registerPage.alreadyHave")} <StyledLinkBlue to="/login">{t("registerPage.login")}</StyledLinkBlue>
             </p>
           </RegisterDesc>
-          <form action="">
+          <form onSubmit={handleSubmit} action="">
             <div>
               <InputDesc>{t("registerPage.fullName")}</InputDesc>
-              <Input type="text" placeholder={t("registerPage.fullNameExample")} />
+              <Input name="name" onChange={handleInput} type="text" placeholder={t("registerPage.fullNameExample")} />
             </div>
             <div>
               <InputDesc>{t("registerPage.email")}</InputDesc>
-              <Input type="email" placeholder={t("registerPage.emailExample")} />
+              <Input name="email" onChange={handleInput} type="email" placeholder={t("registerPage.emailExample")} />
             </div>
             <div>
               <InputDesc>{t("registerPage.password")}</InputDesc>
-              <Input type="password" placeholder={t("registerPage.passwordExample")} />
+              <Input
+                name="password"
+                onChange={handleInput}
+                type="password"
+                placeholder={t("registerPage.passwordExample")}
+              />
             </div>
             <div>
               <InputDesc>{t("registerPage.confirmPassword")}</InputDesc>
-              <Input type="text" placeholder={t("registerPage.confirmPasswordExample")} />
+              <Input
+                name="password_confirmation"
+                onChange={handleInput}
+                type="password"
+                placeholder={t("registerPage.confirmPasswordExample")}
+              />
             </div>
+            {errorMessage.api && <ApiError>{errorMessage.api}</ApiError>}
             <div>
-              <GradientButtonCenter>{t("registerPage.createAccount")}</GradientButtonCenter>
+              <GradientButtonCenter
+                disable={isLoading}
+                onClick={handleClick}
+                transition={{ duration: 0.3 }}
+                variants={{ shake: { x: [-100, 0, 100, 0, -100, 0, 100, 0] } }}
+                animate={isShakeWhenApiError && "shake"}
+              >
+                {!isLoading ? t("registerPage.createAccount") : <Spinner small white />}
+              </GradientButtonCenter>
             </div>
           </form>
         </RegisterForm>
@@ -163,4 +149,4 @@ const Register: FunctionComponent = () => {
   );
 };
 
-export default Register;
+export default withRouter(Register);

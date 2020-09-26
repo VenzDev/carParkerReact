@@ -8,7 +8,7 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import SideNavbar from "./SideNavbar";
 
-interface IHeader extends RouteComponentProps<any> {}
+interface IHeader extends RouteComponentProps {}
 
 const Header: FunctionComponent<IHeader> = ({ history }) => {
   const { t, i18n } = useTranslation();
@@ -18,10 +18,14 @@ const Header: FunctionComponent<IHeader> = ({ history }) => {
   const handleNavbar = () => setNavbarOpen(!isNavbarOpen);
 
   useEffect(() => {
-    history.listen((location) => {
+    const unlisten = history.listen((location) => {
       if (location.pathname !== "/") setHomePage(false);
       else setHomePage(true);
     });
+
+    return () => {
+      unlisten();
+    };
   }, [history]);
 
   const changeLanguage = (language: string) => {

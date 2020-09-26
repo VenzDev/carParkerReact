@@ -1,6 +1,11 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useState } from "react";
 import styled from "styled-components";
 import logo from "../../assets/logo3.svg";
+import { motion } from "framer-motion";
+import { logout } from "../../api/Api";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+import Spinner from "../Reusable/Spinner";
+import { setToast, LOGIN } from "../../utils/toast";
 
 const HeaderWrapper = styled.div`
   position: fixed;
@@ -32,6 +37,10 @@ const Flex = styled.div`
   align-items: center;
 `;
 
+interface IArrow {
+  rotate: boolean;
+}
+
 const Arrow = styled.div`
   background-color: #0080ff;
   margin-left: 0.5rem;
@@ -42,6 +51,8 @@ const Arrow = styled.div`
   align-items: center;
   justify-content: center;
   color: white;
+  transition: 0.3s;
+  transform: ${({ rotate }: IArrow) => (rotate ? "rotate(180deg)" : "rotate(0deg)")};
 `;
 
 const LogoImg = styled.img`
@@ -63,7 +74,43 @@ const H2 = styled.h2`
   }
 `;
 
-const Header: FunctionComponent = () => {
+const Logout = styled(motion.div)`
+  position: absolute;
+  background-color: white;
+  top: 80px;
+  padding: 0.5rem;
+  width: 120px;
+  border-radius: 10px;
+  box-shadow: 4px 8px 12px rgba(0, 0, 0, 0.1);
+`;
+
+const LogoutButton = styled.p`
+  cursor: pointer;
+  height: 25px;
+  text-align: center;
+`;
+
+const Header: FunctionComponent<RouteComponentProps> = ({ history }) => {
+  const [isUserMenu, setUserMenu] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+
+  const variants = {
+    open: { opacity: 1, y: 0 },
+    closed: { opacity: 0, y: "20%" },
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+      setToast(LOGIN, "Successfully logged out");
+      history.push("/login");
+    }
+  };
+
   return (
     <HeaderWrapper>
       <Flex>
@@ -71,13 +118,27 @@ const Header: FunctionComponent = () => {
         <H2>Hello, John</H2>
       </Flex>
       <Flex>
-        <p>John Smith</p>
-        <Arrow>
+        <p onClick={() => setUserMenu(!isUserMenu)}>John Smith</p>
+        <Arrow onClick={() => setUserMenu(!isUserMenu)} rotate={isUserMenu}>
           <i className="fas fa-angle-down"></i>
         </Arrow>
+        <Logout
+          animate={isUserMenu ? "open" : "closed"}
+          transition={{ duration: 0.5, times: [0, 0.5], ease: "easeInOut", delay: 0 }}
+          variants={variants}
+        >
+          <LogoutButton
+            onClick={() => {
+              setLoading(true);
+              handleLogout();
+            }}
+          >
+            {isLoading ? <Spinner small /> : "Logout"}
+          </LogoutButton>
+        </Logout>
       </Flex>
     </HeaderWrapper>
   );
 };
 
-export default Header;
+export default withRouter(Header);

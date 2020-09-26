@@ -1,80 +1,95 @@
-import React, { FunctionComponent } from "react";
-import styled from "styled-components";
-import { StyledLink } from "../../components/Reusable/Links";
-import { GradientButton } from "../../components/Button";
+import React, { FunctionComponent, FormEvent, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+import { login } from "../../api/Api";
+import { validateEmail, validatePassword, validInputs } from "../../utils/validators/validateLogin";
+import Spinner from "../../components/Reusable/Spinner";
+import {
+  Wrapper,
+  LoginrDesc,
+  LoginContent,
+  InputWrapper,
+  Input,
+  InputDesc,
+  StyledLinkBlue,
+  GradientButtonCenter,
+  ErrorMessage,
+  ApiError,
+} from "./styles";
+import { LoginData } from "../../features/types";
+import { setToast, DASHBOARD, LOGIN, isToast, IToast, Toast } from "../../utils/toast";
+import { Snackbar } from "@material-ui/core";
 
-const Wrapper = styled.div`
-  width: 100%;
-  height: 100%;
-  background: #00d3ff;
-  background-image: linear-gradient(to bottom, #0080ff, #0098ff, #00aeff, #00c1ff, #00d3ff);
-`;
+interface IProps extends RouteComponentProps {}
 
-const LoginContent = styled.div`
-  position: absolute;
-  top: 52%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 30%;
-  border-radius: 23px;
-  background-color: white;
-  padding: 2rem;
+interface Error {
+  email: string | null;
+  password: string | null;
+  api: string | null;
+}
 
-  @media (max-width: 1200px) {
-    width: 60%;
-  }
-
-  @media (max-width: 650px) {
-    width: 80%;
-  }
-
-  @media (max-width: 500px) {
-    width: 90%;
-  }
-`;
-
-const LoginrDesc = styled.div`
-  text-align: center;
-  margin-bottom: 1rem;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  height: 35px;
-  border-radius: 23px;
-  border: none;
-  background-color: #f5f5f5;
-  outline: none;
-  text-indent: 1rem;
-  margin-bottom: 1.5rem;
-`;
-
-const InputDesc = styled.p`
-  margin: 0;
-  padding: 0;
-  padding-left: 1rem;
-  padding-bottom: 5px;
-
-  @media (max-width: 500px) {
-    font-size: 0.8rem;
-  }
-`;
-
-const StyledLinkBlue = styled(StyledLink)`
-  color: blue !important;
-`;
-
-const GradientButtonCenter = styled(GradientButton)`
-  margin: 2rem auto;
-  display: block;
-`;
-
-const Login: FunctionComponent = () => {
+const Login: FunctionComponent<IProps> = ({ history }) => {
   const { t } = useTranslation();
+  const [data, setData] = useState<LoginData>({ email: "", password: "" });
+  const [isShakeWhenApiError, setShakeWhenApiError] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<Error>({ email: null, password: null, api: null });
+  const [isRegisteredToast, setRegisteredToast] = useState<IToast>({ message: null, isToast: false });
+
+  useEffect(() => {
+    setRegisteredToast(isToast(LOGIN));
+  }, []);
+
+  const removeSpacesFromInputs = () => {
+    setData({ email: data.email.trim(), password: data.password.trim() });
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    removeSpacesFromInputs();
+
+    if (validInputs(data)) {
+      try {
+        await login(data);
+        setToast(DASHBOARD, "Successfully logged in");
+        history.push("/dashboard");
+        return;
+      } catch (e) {
+        setShakeWhenApiError(true);
+        if (e.response) {
+          setErrorMessage({ ...errorMessage, api: e.response.data.message });
+        } else setErrorMessage({ ...errorMessage, api: e.message });
+      }
+    }
+
+    setLoading(false);
+  };
+
+  const handleInput = (e: FormEvent<HTMLInputElement>) => {
+    const { value, name } = e.currentTarget;
+
+    if (name === "email") setErrorMessage({ ...errorMessage, email: validateEmail(value) });
+
+    if (name === "password") setErrorMessage({ ...errorMessage, password: validatePassword(value) });
+
+    setData({ ...data, [name]: value });
+  };
+
+  const handleClick = () => {
+    setShakeWhenApiError(false);
+    setLoading(true);
+  };
 
   return (
     <Wrapper>
+      <Snackbar
+        autoHideDuration={3000}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        onClose={() => setRegisteredToast({ message: null, isToast: false })}
+        open={isRegisteredToast.isToast}
+      >
+        <Toast>{isRegisteredToast.message}</Toast>
+      </Snackbar>
       <LoginContent>
         <LoginrDesc>
           <h2>{t("loginPage.login")}</h2>
@@ -82,17 +97,42 @@ const Login: FunctionComponent = () => {
             {t("loginPage.notHave")} <StyledLinkBlue to="/register">{t("loginPage.register")}</StyledLinkBlue>
           </p>
         </LoginrDesc>
-        <form action="">
-          <div>
+        <form style={{ position: "relative" }} onSubmit={handleSubmit} action="">
+          <InputWrapper>
             <InputDesc>{t("loginPage.email")}</InputDesc>
-            <Input placeholder={t("loginPage.emailExample")} type="email" />
-          </div>
-          <div>
+            <Input
+              error={!!errorMessage.email}
+              onChange={handleInput}
+              placeholder={t("loginPage.emailExample")}
+              type="email"
+              name="email"
+              disabled={isLoading}
+            />
+            {errorMessage.email && <ErrorMessage>{errorMessage.email}</ErrorMessage>}
+          </InputWrapper>
+          <InputWrapper>
             <InputDesc>{t("loginPage.password")}</InputDesc>
-            <Input placeholder={t("loginPage.passwordExample")} type="password" />
-          </div>
+            <Input
+              error={!!errorMessage.password}
+              onChange={handleInput}
+              placeholder={t("loginPage.passwordExample")}
+              type="password"
+              name="password"
+              disabled={isLoading}
+            />
+            {errorMessage.password && <ErrorMessage>{errorMessage.password}</ErrorMessage>}
+          </InputWrapper>
+          {errorMessage.api && <ApiError>{errorMessage.api}</ApiError>}
           <div>
-            <GradientButtonCenter>{t("loginPage.login")}</GradientButtonCenter>
+            <GradientButtonCenter
+              disable={isLoading}
+              onClick={handleClick}
+              transition={{ duration: 0.3 }}
+              variants={{ shake: { x: [-100, 0, 100, 0, -100, 0, 100, 0] } }}
+              animate={isShakeWhenApiError && "shake"}
+            >
+              {!isLoading ? t("loginPage.login") : <Spinner small white />}
+            </GradientButtonCenter>
           </div>
         </form>
       </LoginContent>
@@ -100,4 +140,4 @@ const Login: FunctionComponent = () => {
   );
 };
 
-export default Login;
+export default withRouter(Login);

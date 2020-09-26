@@ -1,8 +1,11 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useState, useEffect } from "react";
 import { styled } from "../../styles/theme";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import Footer from "./Footer";
+import { auth } from "../../api/Api";
+import Spinner from "../../components/Reusable/Spinner";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -20,15 +23,37 @@ const Content = styled.div`
   }
 `;
 
-const DashboardWrapper: FunctionComponent = ({ children }) => {
+interface DashboardWrapper extends RouteComponentProps {}
+
+const DashboardWrapper: FunctionComponent<DashboardWrapper> = ({ children, history }) => {
+  const [isLoading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function authUser() {
+      try {
+        await auth();
+        setLoading(false);
+      } catch (e) {
+        history.push("/login");
+      }
+    }
+
+    authUser();
+  }, []);
   return (
     <Wrapper>
-      <Sidebar />
-      <Header />
-      <Content>{children}</Content>
-      <Footer />
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <>
+          <Sidebar />
+          <Header />
+          <Content>{children}</Content>
+          <Footer />
+        </>
+      )}
     </Wrapper>
   );
 };
 
-export default DashboardWrapper;
+export default withRouter(DashboardWrapper);

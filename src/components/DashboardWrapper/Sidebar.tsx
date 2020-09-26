@@ -38,6 +38,9 @@ const LogoImg = styled.img`
 `;
 
 const StyledNavLinkSidebar = styled(StyledNavLink)`
+  > div {
+    transition: 0.3s ease-out;
+  }
   &.active > div {
     color: ${({ theme }) => theme.color.blueDark};
     background-color: ${({ theme }) => theme.color.lightAqua};
