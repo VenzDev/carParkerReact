@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LoginData, RegisterData } from "../features/types";
+import { CheckDates, LoginData, RegisterData, ReserveSlot } from "../features/types";
 
 let Api = axios.create({
   baseURL: "http://localhost:8000/api",
@@ -35,6 +35,17 @@ export const auth = async () => {
 export const logout = async () => {
   await Api.get("/csrf-cookie");
   await Api.post("/logout");
+};
+
+export const checkParking = async (dates: CheckDates) => {
+  await Api.get("/csrf-cookie");
+  const data = Api.post("/checkParking", dates);
+  return data;
+};
+
+export const reserveSlot = async (credentials: ReserveSlot) => {
+  await Api.get("/csrf-cookie");
+  await Api.post("/reserveSlot", credentials);
 };
 
 export default Api;

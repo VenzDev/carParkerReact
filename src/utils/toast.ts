@@ -10,7 +10,6 @@ export interface IToast {
 
 export const isToast = (status: string): IToast => {
   const message = localStorage.getItem(status);
-  console.log(message);
   if (message) {
     console.log(message);
     localStorage.removeItem(status);

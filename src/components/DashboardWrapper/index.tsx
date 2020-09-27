@@ -6,6 +6,8 @@ import Footer from "./Footer";
 import { auth } from "../../api/Api";
 import Spinner from "../../components/Reusable/Spinner";
 import { withRouter, RouteComponentProps } from "react-router-dom";
+import { login } from "../../features/User/slice";
+import { useDispatch } from "react-redux";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -27,11 +29,16 @@ interface DashboardWrapper extends RouteComponentProps {}
 
 const DashboardWrapper: FunctionComponent<DashboardWrapper> = ({ children, history }) => {
   const [isLoading, setLoading] = useState(true);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function authUser() {
       try {
-        await auth();
+        const user = await auth();
+        console.log(user);
+        dispatch(
+          login({ name: user.data.name, user_id: user.data.id, active_reservations: user.data.reservations.length })
+        );
         setLoading(false);
       } catch (e) {
         history.push("/login");
@@ -39,7 +46,7 @@ const DashboardWrapper: FunctionComponent<DashboardWrapper> = ({ children, histo
     }
 
     authUser();
-  }, []);
+  }, [dispatch, history]);
   return (
     <Wrapper>
       {isLoading ? (

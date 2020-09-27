@@ -40,7 +40,11 @@ const dateWithCustomMinutes = (): Date => {
   return date;
 };
 
-const DateSelectors: FunctionComponent = () => {
+interface IProps {
+  getDate: (date: Date, startHour: Date, endHour: Date) => void;
+}
+
+const DateSelectors: FunctionComponent<IProps> = ({ getDate }) => {
   const [date, setDate] = useState<Date | null>(new Date());
   const [startHour, setStartHour] = useState<Date | null>(dateWithoutMinutes());
   const [endHour, setEndHour] = useState<Date | null>(dateWithCustomMinutes());
@@ -58,18 +62,24 @@ const DateSelectors: FunctionComponent = () => {
     validateHours();
   }, [startHour, endHour]);
 
+  useEffect(() => {
+    getDate(date!, startHour!, endHour!);
+  }, [getDate, startHour, endHour]);
+
   const handleDateChange = (date: Date | null) => {
     setDate(date);
   };
 
-  const handleStartHour = (date: Date | null) => {
-    date?.setMinutes(0);
-    setStartHour(date);
+  const handleStartHour = (startDate: Date | null) => {
+    startDate?.setMinutes(0);
+    setStartHour(startDate);
+    getDate(date!, startDate!, endHour!);
   };
 
-  const handleEndHour = (date: Date | null) => {
-    date?.setMinutes(45);
-    setEndHour(date);
+  const handleEndHour = (endDate: Date | null) => {
+    endDate?.setMinutes(45);
+    setEndHour(endDate);
+    getDate(date!, startHour!, endDate!);
   };
 
   return (

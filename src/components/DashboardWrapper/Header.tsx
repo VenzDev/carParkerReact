@@ -6,6 +6,9 @@ import { logout } from "../../api/Api";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import Spinner from "../Reusable/Spinner";
 import { setToast, LOGIN } from "../../utils/toast";
+import { useSelector, useDispatch } from "react-redux";
+import { selectUser, logout as logoutRedux } from "../../features/User/slice";
+import { User } from "../../features/types";
 
 const HeaderWrapper = styled.div`
   position: fixed;
@@ -52,7 +55,7 @@ const Arrow = styled.div`
   justify-content: center;
   color: white;
   transition: 0.3s;
-  transform: ${({ rotate }: IArrow) => (rotate ? "rotate(180deg)" : "rotate(0deg)")};
+  transform: ${({ rotate }: IArrow) => rotate && "rotate(180deg)"};
 `;
 
 const LogoImg = styled.img`
@@ -93,6 +96,9 @@ const LogoutButton = styled.p`
 const Header: FunctionComponent<RouteComponentProps> = ({ history }) => {
   const [isUserMenu, setUserMenu] = useState(false);
   const [isLoading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+
+  const user: User = useSelector(selectUser);
 
   const variants = {
     open: { opacity: 1, y: 0 },
@@ -102,6 +108,7 @@ const Header: FunctionComponent<RouteComponentProps> = ({ history }) => {
   const handleLogout = async () => {
     try {
       await logout();
+      dispatch(logoutRedux({}));
     } catch (e) {
       console.log(e);
     } finally {
@@ -115,10 +122,10 @@ const Header: FunctionComponent<RouteComponentProps> = ({ history }) => {
     <HeaderWrapper>
       <Flex>
         <LogoImg src={logo} alt="logo" />
-        <H2>Hello, John</H2>
+        <H2>Hello, {user.name}</H2>
       </Flex>
       <Flex>
-        <p onClick={() => setUserMenu(!isUserMenu)}>John Smith</p>
+        <p onClick={() => setUserMenu(!isUserMenu)}>{user.name}</p>
         <Arrow onClick={() => setUserMenu(!isUserMenu)} rotate={isUserMenu}>
           <i className="fas fa-angle-down"></i>
         </Arrow>

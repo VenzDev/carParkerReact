@@ -12,7 +12,6 @@ import {
   Divider,
   RegisterImage,
   StyledLinkBlue,
-  ErrorMessage,
   ApiError,
 } from "./styles";
 import { register } from "../../api/Api";

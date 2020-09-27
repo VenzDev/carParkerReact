@@ -1,5 +1,11 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
+import { selectReservations } from "../../../features/Reservations/slice";
+import { reserveSlot } from "../../../api/Api";
+import { selectUser } from "../../../features/User/slice";
+import { Reservation, User } from "../../../features/types";
+import Spinner from "../../Reusable/Spinner";
 
 const ParkingWrapper = styled.div`
   width: 800px;
@@ -45,6 +51,10 @@ const Slots = styled.div`
   justify-content: space-between;
 `;
 
+interface ISlot {
+  status: string;
+}
+
 const Slot = styled.div`
   flex: 0 0 75px;
   height: 100px;
@@ -54,6 +64,25 @@ const Slot = styled.div`
   justify-content: center;
   color: white;
   font-size: 1.5rem;
+  transition: 0.3s;
+
+  background-color: ${({ status }: ISlot) => {
+    if (status === "FREE") return "#1eff00";
+    else if (status === "RESERVED") return "#ffc800";
+  }};
+
+  box-shadow: ${({ status }: ISlot) => {
+    if (status === "FREE") return "2px 6px 12px rgba(30, 255, 0, 0.3)";
+    else if (status === "RESERVED") return "2px 6px 12px rgba(255, 200, 0, 0.3)";
+  }};
+
+  cursor: ${({ status }: ISlot) => (status === "FREE" ? "pointer" : "inherit")};
+
+  &:hover {
+    box-shadow: ${({ status }: ISlot) => {
+      if (status === "FREE") return "2px 6px 12px rgba(30, 255, 0, 0.9)";
+    }};
+  }
 
   @media (max-width: 1100px) {
     flex: 0 0 50px;
@@ -69,27 +98,6 @@ const Slot = styled.div`
     height: 50px;
     flex: 0 0 30px;
   }
-`;
-
-const SlotFree = styled(Slot)`
-  background-color: #1eff00;
-  box-shadow: 2px 6px 12px rgba(30, 255, 0, 0.3);
-  transition: 0.4s;
-  cursor: pointer;
-
-  &:hover {
-    box-shadow: 2px 6px 12px rgba(30, 255, 0, 0.9);
-  }
-`;
-
-const SlotWarning = styled(Slot)`
-  background-color: #ffc800;
-  box-shadow: 2px 6px 12px rgba(255, 200, 0, 0.3);
-`;
-
-const SlotReserved = styled(Slot)`
-  background-color: #ff0000;
-  box-shadow: 2px 6px 12px rgba(255, 0, 0, 0.3);
 `;
 
 const SlotSpace = styled.div`
@@ -122,6 +130,25 @@ const SlotHorizontal = styled.div`
   justify-content: center;
   color: white;
   font-size: 1.5rem;
+  transition: 0.3s;
+
+  background-color: ${({ status }: ISlot) => {
+    if (status === "FREE") return "#1eff00";
+    else if (status === "RESERVED") return "#ffc800";
+  }};
+
+  box-shadow: ${({ status }: ISlot) => {
+    if (status === "FREE") return "2px 6px 12px rgba(30, 255, 0, 0.3)";
+    else if (status === "RESERVED") return "2px 6px 12px rgba(255, 200, 0, 0.3)";
+  }};
+
+  cursor: ${({ status }: ISlot) => (status === "FREE" ? "pointer" : "inherit")};
+
+  &:hover {
+    box-shadow: ${({ status }: ISlot) => {
+      if (status === "FREE") return "2px 6px 12px rgba(30, 255, 0, 0.9)";
+    }};
+  }
 
   @media (max-width: 1100px) {
     flex: 0 0 75px;
@@ -140,27 +167,6 @@ const SlotHorizontal = styled.div`
   }
 `;
 
-const SlotHorizontalFree = styled(SlotHorizontal)`
-  background-color: #1eff00;
-  box-shadow: 2px 6px 12px rgba(30, 255, 0, 0.3);
-  transition: 0.4s;
-  cursor: pointer;
-
-  &:hover {
-    box-shadow: 2px 6px 12px rgba(30, 255, 0, 0.9);
-  }
-`;
-
-const SlotHorizontalWarning = styled(SlotHorizontal)`
-  background-color: #ffc800;
-  box-shadow: 2px 6px 12px rgba(255, 200, 0, 0.3);
-`;
-
-const SlotHorizontalReserved = styled(SlotHorizontal)`
-  background-color: #ff0000;
-  box-shadow: 2px 6px 12px rgba(255, 0, 0, 0.3);
-`;
-
 const Exchange = styled.div`
   position: absolute;
   right: 20px;
@@ -177,52 +183,87 @@ const Exchange = styled.div`
 `;
 
 const ParkingVisualisation: FunctionComponent = () => {
+  const { reservations, loading } = useSelector(selectReservations);
+  const [reservedArray, setReservedArray] = useState<Array<string>>([]);
+  const user: User = useSelector(selectUser);
+
+  useEffect(() => {
+    if (reservations && reservations.length !== 0) {
+      let pomArray: Array<string> = [];
+      reservations.forEach((r) => {
+        pomArray.push(r.id);
+      });
+      setReservedArray(pomArray);
+    }
+  }, [reservations]);
+
+  const getStatus = (slot_id: string) => {
+    const findedReservation = reservations?.find((r) => r.parking_slot_id === slot_id);
+    if (findedReservation) return findedReservation.status;
+    return "FREE";
+  };
+
+  const handleReserve = async (slot_id: string) => {
+    const status = getStatus(slot_id);
+    if (status === "FREE") console.log("można rezerwować");
+  };
+
   return (
     <ParkingWrapper>
-      <Exchange>
-        <i className="fas fa-exchange-alt"></i>
-      </Exchange>
-      <Slots>
-        <SlotFree>1</SlotFree>
-        <SlotWarning>2</SlotWarning>
-        <SlotFree>3</SlotFree>
-        <SlotWarning>4</SlotWarning>
-        <SlotReserved>5</SlotReserved>
-        <SlotFree>6</SlotFree>
-        <SlotFree>7</SlotFree>
-        <SlotFree>8</SlotFree>
-      </Slots>
-      <SlotSpace />
-      <Slots>
-        <SlotsHalf>
-          <SlotHorizontalFree>9</SlotHorizontalFree>
-          <SlotHorizontalReserved>10</SlotHorizontalReserved>
-        </SlotsHalf>
-        <SlotsHalf>
-          <SlotHorizontalFree>11</SlotHorizontalFree>
-        </SlotsHalf>
-      </Slots>
-      <Slots>
-        <SlotsHalf>
-          <SlotHorizontalWarning>12</SlotHorizontalWarning>
-          <SlotHorizontalFree>13</SlotHorizontalFree>
-        </SlotsHalf>
-        <SlotsHalf>
-          <SlotHorizontalFree>14</SlotHorizontalFree>
-          <SlotHorizontalReserved>15</SlotHorizontalReserved>
-        </SlotsHalf>
-      </Slots>
-      <SlotSpace />
-      <Slots>
-        <SlotFree>16</SlotFree>
-        <SlotFree>17</SlotFree>
-        <SlotFree>18</SlotFree>
-        <SlotFree>19</SlotFree>
-        <SlotFree>20</SlotFree>
-        <SlotFree>21</SlotFree>
-        <SlotFree>22</SlotFree>
-        <SlotFree>23</SlotFree>
-      </Slots>
+      {loading ? (
+        <div style={{ height: "500px" }}>
+          <Spinner />
+        </div>
+      ) : (
+        <>
+          <Exchange>
+            <i className="fas fa-exchange-alt"></i>
+          </Exchange>
+          <Slots>
+            <Slot status={getStatus("1")} onClick={() => handleReserve("1")}>
+              1
+            </Slot>
+            <Slot status={getStatus("2")}>2</Slot>
+            <Slot status={getStatus("3")}>3</Slot>
+            <Slot status={getStatus("4")}>4</Slot>
+            <Slot status={getStatus("5")}>5</Slot>
+            <Slot status={getStatus("6")}>6</Slot>
+            <Slot status={getStatus("7")}>7</Slot>
+            <Slot status={getStatus("8")}>8</Slot>
+          </Slots>
+          <SlotSpace />
+          <Slots>
+            <SlotsHalf>
+              <SlotHorizontal status={getStatus("9")}>9</SlotHorizontal>
+              <SlotHorizontal status={getStatus("10")}>10</SlotHorizontal>
+            </SlotsHalf>
+            <SlotsHalf>
+              <SlotHorizontal status={getStatus("11")}>11</SlotHorizontal>
+            </SlotsHalf>
+          </Slots>
+          <Slots>
+            <SlotsHalf>
+              <SlotHorizontal status={getStatus("12")}>12</SlotHorizontal>
+              <SlotHorizontal status={getStatus("13")}>13</SlotHorizontal>
+            </SlotsHalf>
+            <SlotsHalf>
+              <SlotHorizontal status={getStatus("14")}>14</SlotHorizontal>
+              <SlotHorizontal status={getStatus("15")}>15</SlotHorizontal>
+            </SlotsHalf>
+          </Slots>
+          <SlotSpace />
+          <Slots>
+            <Slot status={getStatus("16")}>16</Slot>
+            <Slot status={getStatus("17")}>17</Slot>
+            <Slot status={getStatus("18")}>18</Slot>
+            <Slot status={getStatus("19")}>19</Slot>
+            <Slot status={getStatus("20")}>20</Slot>
+            <Slot status={getStatus("21")}>21</Slot>
+            <Slot status={getStatus("22")}>22</Slot>
+            <Slot status={getStatus("23")}>23</Slot>
+          </Slots>
+        </>
+      )}
     </ParkingWrapper>
   );
 };

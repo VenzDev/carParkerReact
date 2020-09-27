@@ -10,7 +10,7 @@ i18n
   .init({
     whitelist: ["pl", "en"],
     fallbackLng: "en",
-    debug: true,
+    debug: false,
     detection: {
       order: ["customDetector", "querystring", "cookie", "localStorage", "navigator", "htmlTag"],
       cache: ["cookie"],
