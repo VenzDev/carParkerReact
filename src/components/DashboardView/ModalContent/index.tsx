@@ -1,39 +1,12 @@
 import React, { FunctionComponent, useState } from "react";
-import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { selectTimes } from "../../../features/Time/slice";
 import { selectUser } from "../../../features/User/slice";
-import { GradientButton } from "../../Button";
 import Spinner from "../../Reusable/Spinner";
 import { reserveSlot, auth, checkParking } from "../../../api/Api";
 import { setReservations } from "../../../features/Reservations/slice";
 import { login } from "../../../features/User/slice";
-
-const Content = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  padding: 2rem;
-  transform: translate(-50%, -50%);
-  width: 30%;
-  height: 30%;
-  background-color: white;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-`;
-
-const SuccessIcon = styled.div`
-  font-size: 3rem;
-  color: green;
-`;
-
-const RealtiveGradientButton = styled(GradientButton)`
-  position: relative;
-  height: 50px;
-`;
+import { Content, RelativeGradientButton, SuccessIcon, CloseButton } from "./styles";
 
 interface IModalContent {
   parkingId: string | null;
@@ -59,6 +32,8 @@ const ModalContent: FunctionComponent<IModalContent> = ({ parkingId, closeModal 
         to: times.endTime,
         user_id: user.user_id,
       });
+
+    //refresh user data in application
     const fetchedUser = await auth();
     dispatch(
       login({
@@ -67,28 +42,34 @@ const ModalContent: FunctionComponent<IModalContent> = ({ parkingId, closeModal 
         active_reservations: fetchedUser.data.reservations.length,
       })
     );
+
+    //refresh parking visualization
     if (times.endTime && times.startTime) {
       const response = await checkParking({ to: times.endTime, from: times.startTime });
       dispatch(setReservations(response.data));
     }
+
     setLoading(false);
     setModalState(SUCCESS_STATUS);
   };
   return (
     <Content>
+      <CloseButton onClick={closeModal}>
+        <i className="fas fa-times"></i>
+      </CloseButton>
       {modalState === CONFIRM_STATUS && (
         <>
           <p>Rezerwacja od: {times.startTime}</p>
           <p>Rezerwacja do: {times.endTime}</p>
           <p>Miejsce parkingowe :{parkingId}</p>
-          <RealtiveGradientButton
+          <RelativeGradientButton
             onClick={() => {
               setLoading(true);
               handleSubmit();
             }}
           >
             {isLoading ? <Spinner small white /> : "Potwierdź rezerwację"}
-          </RealtiveGradientButton>
+          </RelativeGradientButton>
         </>
       )}
       {modalState === SUCCESS_STATUS && (
@@ -97,13 +78,13 @@ const ModalContent: FunctionComponent<IModalContent> = ({ parkingId, closeModal 
             <i className="fas fa-calendar-check"></i>
           </SuccessIcon>
           <p>Successfully reserved parking slot!</p>
-          <GradientButton onClick={closeModal}>Close</GradientButton>
+          <RelativeGradientButton onClick={closeModal}>Close</RelativeGradientButton>
         </>
       )}
       {modalState === FAILED_STATUS && (
         <>
           <h2>Something went wrong!</h2>
-          <GradientButton onClick={closeModal}>Close</GradientButton>
+          <RelativeGradientButton onClick={closeModal}>Close</RelativeGradientButton>
         </>
       )}
     </Content>
