@@ -1,5 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { styled } from "../../../styles/theme";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../features/User/slice";
 
 const InfoWrapper = styled.div`
   display: flex;
@@ -67,6 +69,7 @@ const InfoIcon = styled.div`
 `;
 
 const InfoGeneral: FunctionComponent = () => {
+  const user = useSelector(selectUser);
   return (
     <InfoWrapper>
       <Info>
@@ -80,7 +83,7 @@ const InfoGeneral: FunctionComponent = () => {
       </Info>
       <Info>
         <InfoContent>
-          <h2>1</h2>
+          <h2>{user.active_reservations}</h2>
           <p>Your active reservations</p>
         </InfoContent>
         <InfoIcon>

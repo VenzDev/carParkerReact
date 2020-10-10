@@ -13,7 +13,7 @@ export interface RegisterData {
 export interface User {
   user_id: number | null;
   name: string | null;
-  active_reservations: Array<Reservation> | null;
+  active_reservations: number | null;
   active_account: boolean;
 }
 
@@ -21,9 +21,14 @@ export interface Reservation {
   id: string;
   user_id: number;
   reservation_from: string;
+  system_reservation_from: string;
+  system_reservation_to: string;
   reservation_to: string;
   parking_slot_id: string;
   status: string;
+  to_open: string | null;
+  to_close: string | null;
+  to_system_close: string | null;
 }
 
 export interface CheckDates {
@@ -36,5 +41,4 @@ export interface ReserveSlot {
   from: string;
   to: string;
   parking_slot_id: string;
-  status: string;
 }

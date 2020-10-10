@@ -2,6 +2,8 @@ import React, { FunctionComponent } from "react";
 import { styled } from "../../styles/theme";
 import { StyledNavLink } from "../Reusable/Links";
 import logo from "../../assets/logo3.svg";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../features/User/slice";
 
 const SidebarWrapper = styled.div`
   color: ${({ theme }) => theme.color.white};
@@ -67,6 +69,7 @@ const NavItem = styled.div`
   font-size: 1.3rem;
   i {
     width: 50px;
+    position: relative;
   }
 
   @media (max-width: 1400px) {
@@ -85,7 +88,29 @@ const Copyright = styled.div`
   padding: 1rem;
 `;
 
+const ReservationCount = styled.div`
+  color: white;
+  position: absolute;
+  right: 35%;
+  bottom: -50%;
+  font-size: 0.8rem;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background-color: ${({ theme }) => theme.color.blueDark};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 const Sidebar: FunctionComponent = () => {
+  const user = useSelector(selectUser);
+
+  const getReservationsCount = () => {
+    if (user.active_reservations && user.active_reservations > 0) return user.active_reservations;
+    else return "";
+  };
+
   return (
     <SidebarWrapper>
       <Flex>
@@ -102,7 +127,9 @@ const Sidebar: FunctionComponent = () => {
           </StyledNavLinkSidebar>
           <StyledNavLinkSidebar exact to="/dashboard/orders">
             <NavItem>
-              <i className="fas fa-shopping-cart"></i>
+              <i className="fas fa-shopping-cart">
+                <ReservationCount>{getReservationsCount()}</ReservationCount>
+              </i>
               <span>Orders</span>
             </NavItem>
           </StyledNavLinkSidebar>

@@ -1,42 +1,20 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
-import styled from "styled-components";
+import { H2, TimerDiv, Order } from "./styles";
 import DateFnsUtils from "@date-io/date-fns";
-import { KeyboardTimePicker, KeyboardDatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import { TimePicker, DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import "date-fns";
 
-const TimerDiv = styled.div`
-  display: flex;
-  justify-content: space-around;
-  margin: 0 2rem;
-  margin-bottom: 1rem;
-  background-color: white;
-  box-shadow: 2px 6px 12px rgba(0, 0, 0, 0.05);
-  padding: 1rem;
-  border-radius: 12px;
-  flex-wrap: wrap;
-`;
-
-const H2 = styled.h2`
-  font-weight: 200;
-  margin-left: 2rem;
-`;
-
-const Order = styled.div`
-  @media (max-width: 1200px) {
-    order: 1;
-  }
-`;
-
+//Set date without minutes
 const dateWithoutMinutes = (): Date => {
   const date = new Date();
   date.setMinutes(0);
   date.setHours(date.getHours() + 1);
   return date;
 };
-
+//Set date with custom minutes (default 30 minutes)
 const dateWithCustomMinutes = (): Date => {
   const date = dateWithoutMinutes();
-  date.setMinutes(45);
+  date.setMinutes(30);
   return date;
 };
 
@@ -51,35 +29,30 @@ const DateSelectors: FunctionComponent<IProps> = ({ getDate }) => {
   const [isError, setError] = useState(false);
 
   useEffect(() => {
-    const validateHours = () => {
-      if (startHour && startHour.getHours() <= new Date().getHours()) {
-        setError(true);
-      } else if (startHour && endHour && startHour?.getHours() > endHour?.getHours()) {
-        setError(true);
-      } else setError(false);
-    };
+    const today = new Date();
 
-    validateHours();
-  }, [startHour, endHour]);
-
-  useEffect(() => {
-    getDate(date!, startHour!, endHour!);
-  }, [getDate, startHour, endHour]);
+    //check when today date is selected and selected start time must be greater than today time!
+    if (startHour && date && date.getDate() === today.getDate() && startHour.getHours() <= today.getHours()) {
+      setError(true);
+    } else if (startHour && endHour && startHour?.getHours() > endHour?.getHours()) {
+      setError(true);
+    } else {
+      getDate(date!, startHour!, endHour!);
+      setError(false);
+    }
+    // eslint-disable-next-line
+  }, [date, startHour, endHour]);
 
   const handleDateChange = (date: Date | null) => {
     setDate(date);
   };
 
   const handleStartHour = (startDate: Date | null) => {
-    startDate?.setMinutes(0);
     setStartHour(startDate);
-    getDate(date!, startDate!, endHour!);
   };
 
   const handleEndHour = (endDate: Date | null) => {
-    endDate?.setMinutes(45);
     setEndHour(endDate);
-    getDate(date!, startHour!, endDate!);
   };
 
   return (
@@ -88,7 +61,7 @@ const DateSelectors: FunctionComponent<IProps> = ({ getDate }) => {
       <TimerDiv>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <Order>
-            <KeyboardDatePicker
+            <DatePicker
               disablePast={true}
               margin="normal"
               id="date-picker-dialog"
@@ -96,40 +69,31 @@ const DateSelectors: FunctionComponent<IProps> = ({ getDate }) => {
               format="MM/dd/yyyy"
               value={date}
               onChange={handleDateChange}
-              KeyboardButtonProps={{
-                "aria-label": "change date",
-              }}
             />
           </Order>
-          <KeyboardTimePicker
+          <TimePicker
             margin="normal"
             id="time-picker"
             label="Start time"
             value={startHour}
             onChange={handleStartHour}
             ampm={false}
-            views={["hours"]}
-            KeyboardButtonProps={{
-              "aria-label": "change time",
-            }}
+            minutesStep={10}
             error={isError}
             helperText={isError && "Invalid hours"}
           />
-          <KeyboardTimePicker
+          <TimePicker
             margin="normal"
             id="time-picker"
             label="End time"
             value={endHour}
             onChange={handleEndHour}
             ampm={false}
+            minutesStep={10}
             error={isError}
             helperText={isError && "Invalid hours"}
-            views={["hours"]}
             cancelLabel="Anuluj"
             okLabel="Potwierdź"
-            KeyboardButtonProps={{
-              "aria-label": "change time",
-            }}
           />
         </MuiPickersUtilsProvider>
       </TimerDiv>

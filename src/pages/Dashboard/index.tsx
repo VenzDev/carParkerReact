@@ -6,6 +6,7 @@ import { isToast, DASHBOARD, Toast, IToast } from "../../utils/toast";
 import { checkParking } from "../../api/Api";
 import { useDispatch } from "react-redux";
 import { setReservations, prepare } from "../../features/Reservations/slice";
+import { setTimes } from "../../features/Time/slice";
 
 const Wrapper = styled.div`
   padding: 2rem;
@@ -39,17 +40,26 @@ const Dashboard: FunctionComponent = () => {
     } else day = date.getUTCDate().toString();
 
     if (startHour.getHours() < 10) {
-      from = `${year}-${month}-${day} 0${startHour.getHours()}:00:00`;
-    } else from = `${year}-${month}-${day} ${startHour.getHours()}:00:00`;
+      from = `${year}-${month}-${day} 0${startHour.getHours()}`;
+    } else from = `${year}-${month}-${day} ${startHour.getHours()}`;
+
+    if (startHour.getMinutes() < 10) {
+      from = `${from}:0${startHour.getMinutes()}:00`;
+    } else from = `${from}:${startHour.getMinutes()}:00`;
 
     if (endHour.getHours() < 10) {
-      to = `${year}-${month}-${day} 0${endHour.getHours()}:45:00`;
-    } else to = `${year}-${month}-${day} ${endHour.getHours()}:45:00`;
+      to = `${year}-${month}-${day} 0${endHour.getHours()}`;
+    } else to = `${year}-${month}-${day} ${endHour.getHours()}`;
+
+    if (endHour.getMinutes() < 10) {
+      to = `${to}:0${endHour.getMinutes()}:00`;
+    } else to = `${to}:${endHour.getMinutes()}:00`;
 
     const obj = {
       from,
       to,
     };
+    dispatch(setTimes({ startTime: from, endTime: to }));
     dispatch(prepare({}));
     const response = await checkParking(obj);
     dispatch(setReservations(response.data));

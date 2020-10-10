@@ -28,7 +28,9 @@ export const register = async (credentials: RegisterData) => {
 };
 
 export const auth = async () => {
-  const data = Api.get("/user");
+  await Api.get("/csrf-cookie");
+  const data = await Api.get("/user");
+  console.log(data);
   return data;
 };
 
@@ -46,6 +48,13 @@ export const checkParking = async (dates: CheckDates) => {
 export const reserveSlot = async (credentials: ReserveSlot) => {
   await Api.get("/csrf-cookie");
   await Api.post("/reserveSlot", credentials);
+};
+
+export const getActiveReservations = async () => {
+  await Api.get("/csrf-cookie");
+  const fetchedData = await Api.get("/active_reservations");
+  console.log(fetchedData);
+  return fetchedData.data;
 };
 
 export default Api;
