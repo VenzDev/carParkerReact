@@ -1,10 +1,22 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../features/User/slice";
 import { Info, InfoContent, InfoIcon, InfoWrapper } from "./styles";
+import { carsOnParking } from "../../../api/Api";
 
 const InfoGeneral: FunctionComponent = () => {
+  const [carsCount, setCarsCount] = useState(null);
+  const [isLoading, setLoading] = useState(true);
   const user = useSelector(selectUser);
+
+  useEffect(() => {
+    const getCarsOnParking = async () => {
+      const data = await carsOnParking();
+      setCarsCount(data);
+      setLoading(false);
+    };
+    getCarsOnParking();
+  }, []);
   return (
     <InfoWrapper>
       <Info>
@@ -27,16 +39,16 @@ const InfoGeneral: FunctionComponent = () => {
       </Info>
       <Info>
         <InfoContent>
-          <h2>10</h2>
-          <p>Free spaces</p>
+          <h2>Low</h2>
+          <p>Today's parking overload</p>
         </InfoContent>
         <InfoIcon>
-          <i className="fas fa-parking"></i>
+          <i className="fas fa-balance-scale"></i>
         </InfoIcon>
       </Info>
       <Info>
         <InfoContent>
-          <h2>3</h2>
+          <h2>{user.cars_on_parking}</h2>
           <p>Cars on parking</p>
         </InfoContent>
         <InfoIcon>

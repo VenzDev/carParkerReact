@@ -15,6 +15,7 @@ export interface User {
   name: string | null;
   active_reservations: number | null;
   active_account: boolean;
+  cars_on_parking: number | null;
 }
 
 export interface Reservation {

@@ -40,6 +40,7 @@ const ModalContent: FunctionComponent<IModalContent> = ({ parkingId, closeModal 
         name: fetchedUser.data.name,
         user_id: fetchedUser.data.id,
         active_reservations: fetchedUser.data.reservations.length,
+        cars_on_parking: fetchedUser.data.cars_on_parking,
       })
     );
 

@@ -53,7 +53,12 @@ export const reserveSlot = async (credentials: ReserveSlot) => {
 export const getActiveReservations = async () => {
   await Api.get("/csrf-cookie");
   const fetchedData = await Api.get("/active_reservations");
-  console.log(fetchedData);
+  return fetchedData.data;
+};
+
+export const carsOnParking = async () => {
+  await Api.get("/csrt-cookie");
+  const fetchedData = await Api.get("/carsOnParking");
   return fetchedData.data;
 };
 
