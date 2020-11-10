@@ -30,15 +30,14 @@ const DateSelectors: FunctionComponent<IProps> = ({ getDate }) => {
 
   useEffect(() => {
     const today = new Date();
-
     //check when today date is selected and selected start time must be greater than today time!
     if (startHour && date && date.getDate() === today.getDate() && startHour.getHours() <= today.getHours()) {
       setError(true);
     } else if (startHour && endHour && startHour?.getHours() > endHour?.getHours()) {
       setError(true);
     } else {
-      getDate(date!, startHour!, endHour!);
       setError(false);
+      getDate(date!, startHour!, endHour!);
     }
     // eslint-disable-next-line
   }, [date, startHour, endHour]);

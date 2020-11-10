@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CheckDates, LoginData, RegisterData, ReserveSlot } from "../features/types";
+import { AvailableReservationsData, CheckDates, LoginData, RegisterData, ReserveSlot } from "../features/types";
 
 let Api = axios.create({
   baseURL: "http://localhost:8000/api",
@@ -30,7 +30,6 @@ export const register = async (credentials: RegisterData) => {
 export const auth = async () => {
   await Api.get("/csrf-cookie");
   const data = await Api.get("/user");
-  console.log(data);
   return data;
 };
 
@@ -57,9 +56,20 @@ export const getActiveReservations = async () => {
 };
 
 export const carsOnParking = async () => {
-  await Api.get("/csrt-cookie");
+  await Api.get("/csrf-cookie");
   const fetchedData = await Api.get("/carsOnParking");
   return fetchedData.data;
+};
+
+export const getAvailableReservations = async (data: AvailableReservationsData) => {
+  await Api.get("/csrf-cookie");
+  const fetchedData = await Api.post("/availableReservations", data);
+  return fetchedData.data;
+};
+
+export const cancelReservation = async (reservation_id: string) => {
+  await Api.get("/csrf-cookie");
+  await Api.post("/cancelReservation", { reservation_id });
 };
 
 export default Api;

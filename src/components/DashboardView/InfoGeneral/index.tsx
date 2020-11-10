@@ -2,26 +2,31 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../features/User/slice";
 import { Info, InfoContent, InfoIcon, InfoWrapper } from "./styles";
-import { carsOnParking } from "../../../api/Api";
 
 const InfoGeneral: FunctionComponent = () => {
-  const [carsCount, setCarsCount] = useState(null);
-  const [isLoading, setLoading] = useState(true);
+  const [clock, setClock] = useState({ h: "12", m: "00", s: "00" });
   const user = useSelector(selectUser);
-
   useEffect(() => {
-    const getCarsOnParking = async () => {
-      const data = await carsOnParking();
-      setCarsCount(data);
-      setLoading(false);
-    };
-    getCarsOnParking();
-  }, []);
+    function checkTime(i: number) {
+      if (i < 10) return "0" + i.toString();
+      return i.toString();
+    }
+
+    function updateTime() {
+      const today = new Date();
+      let h = today.getHours().toString();
+      let m = checkTime(today.getMinutes());
+      let s = checkTime(today.getSeconds());
+      setClock({ h, m, s });
+    }
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  });
   return (
     <InfoWrapper>
       <Info>
         <InfoContent>
-          <h2>{`${new Date().getHours()}:${new Date().getMinutes()}`}</h2>
+          <h2>{`${clock.h}:${clock.m}:${clock.s}`}</h2>
           <p>Current time</p>
         </InfoContent>
         <InfoIcon>

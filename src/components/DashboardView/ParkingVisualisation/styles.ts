@@ -69,11 +69,12 @@ export const Slot = styled.div`
     else if (status === "RESERVED") return "2px 6px 12px rgba(255, 200, 0, 0.3)";
   }};
 
-  cursor: ${({ status }: ISlot) => (status === "FREE" ? "pointer" : "inherit")};
+  cursor: pointer;
 
   &:hover {
     box-shadow: ${({ status }: ISlot) => {
       if (status === "FREE") return "2px 6px 12px rgba(30, 255, 0, 0.9)";
+      else if (status === "RESERVED") return "2px 6px 12px rgba(255, 200, 0, 0.9)";
     }};
   }
 

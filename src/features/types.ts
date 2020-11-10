@@ -30,6 +30,7 @@ export interface Reservation {
   to_open: string | null;
   to_close: string | null;
   to_system_close: string | null;
+  can_cancel: boolean;
 }
 
 export interface CheckDates {
@@ -42,4 +43,10 @@ export interface ReserveSlot {
   from: string;
   to: string;
   parking_slot_id: string;
+}
+
+export interface AvailableReservationsData {
+  from: string | null;
+  to: string | null;
+  parking_slot_id: string | null;
 }

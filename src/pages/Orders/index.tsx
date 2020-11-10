@@ -22,15 +22,17 @@ const Orders: FunctionComponent = () => {
   const [reservations, setReservations] = useState<Array<Reservation>>([]);
   const [isLoading, setLoading] = useState(true);
 
+  const getReservations = async () => {
+    const data = await getActiveReservations();
+    setReservations(data);
+    setLoading(false);
+  };
+
   useEffect(() => {
     setLoading(true);
-    async function getReservations() {
-      const data = await getActiveReservations();
-      setReservations(data);
-      setLoading(false);
-    }
     getReservations();
   }, []);
+
   return (
     <OrdersContainer>
       {isLoading ? (
@@ -39,7 +41,7 @@ const Orders: FunctionComponent = () => {
         <Wrapper>
           <H2>Your active reservations</H2>
           {reservations.map((reservation) => (
-            <Order key={reservation.id} reservation={reservation} />
+            <Order reload={getReservations} key={reservation.id} reservation={reservation} />
           ))}
         </Wrapper>
       )}

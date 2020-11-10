@@ -1,8 +1,11 @@
-import React, { FunctionComponent } from "react";
+import { Backdrop, Fade, Modal } from "@material-ui/core";
+import React, { FunctionComponent, useState } from "react";
 import { Reservation } from "../../../features/types";
 import { styled } from "../../../styles/theme";
+import ModalCancel from "../ModalCancel";
 
 const Wrapper = styled.div`
+  position: relative;
   height: 200px;
   border-radius: 10px;
   margin-bottom: 1rem;
@@ -49,24 +52,73 @@ const Time = styled.div`
   justify-content: center;
 `;
 
+const CancelButton = styled.button`
+  position: absolute;
+  border: none;
+  cursor: pointer;
+  color: ${({ theme }) => theme.color.white};
+  background-color: ${({ theme }) => theme.color.error};
+  border-radius: 6px;
+  padding: 0.3rem 0.5rem;
+  right: 10px;
+  top: 10px;
+  transition: 0.2s;
+  outline: none;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.color.darkError};
+  }
+`;
+
 const Status = styled.p`
   color: ${({ theme }) => theme.color.blueDark};
 `;
 
 interface IOrder {
   reservation: Reservation;
+  reload: () => void;
 }
 
-const Order: FunctionComponent<IOrder> = ({ reservation }) => {
+const Order: FunctionComponent<IOrder> = ({ reservation, reload }) => {
+  const [isModalOpen, setModalOpen] = useState(false);
   const handleStatusMessage = () => {
     if (to_close && !to_open && status === "RESERVED") return `${status} (waiting for RFID card)`;
     if (!to_close && !to_open && status === "RESERVED") return "WAITING FOR ARCHIVE";
     return status;
   };
 
-  const { parking_slot_id, reservation_from, reservation_to, status, to_open, to_close, to_system_close } = reservation;
+  const {
+    id,
+    parking_slot_id,
+    reservation_from,
+    reservation_to,
+    status,
+    to_open,
+    to_close,
+    to_system_close,
+    can_cancel,
+  } = reservation;
+
   return (
     <Wrapper>
+      <Modal
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+        closeAfterTransition
+        onClose={() => setModalOpen(false)}
+        open={isModalOpen}
+      >
+        <Fade in={isModalOpen}>
+          <ModalCancel reload={reload} reservation_id={id} closeModal={() => setModalOpen(false)} />
+        </Fade>
+      </Modal>
+      {can_cancel && (
+        <CancelButton onClick={() => setModalOpen(true)}>
+          Cancel <i className="fas fa-trash"></i>
+        </CancelButton>
+      )}
       <OrderInfo>
         <ParkingId>Parking slot {parking_slot_id}</ParkingId>
         <p>Reservation from {reservation_from}</p>

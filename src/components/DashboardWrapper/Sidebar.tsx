@@ -91,6 +91,7 @@ const Copyright = styled.div`
 const ReservationCount = styled.div`
   color: white;
   position: absolute;
+  font-family: "Fira Sans", sans-serif;
   right: 35%;
   bottom: -50%;
   font-size: 0.8rem;
@@ -128,7 +129,9 @@ const Sidebar: FunctionComponent = () => {
           <StyledNavLinkSidebar exact to="/dashboard/orders">
             <NavItem>
               <i className="fas fa-shopping-cart">
-                <ReservationCount>{getReservationsCount()}</ReservationCount>
+                {user.active_reservations !== null && user.active_reservations > 0 && (
+                  <ReservationCount>{getReservationsCount()}</ReservationCount>
+                )}
               </i>
               <span>Orders</span>
             </NavItem>

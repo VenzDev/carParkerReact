@@ -6,6 +6,9 @@ export const theme = {
     blueLight: "#00d3ff",
     lightAqua: "#edf7ff",
     white: "white",
+    warning: "#ffc800",
+    error: "#d60000",
+    darkError: "#ab0000",
   },
   gradient: {
     toBottom: "linear-gradient(to bottom, #0080ff, #0098ff, #00aeff, #00c1ff, #00d3ff)",

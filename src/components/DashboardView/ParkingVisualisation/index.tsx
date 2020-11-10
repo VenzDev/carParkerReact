@@ -3,15 +3,18 @@ import { useSelector } from "react-redux";
 import { selectReservations } from "../../../features/Reservations/slice";
 import { selectUser } from "../../../features/User/slice";
 import Spinner from "../../Reusable/Spinner";
-import { Modal } from "@material-ui/core";
+import { Backdrop, Fade, Modal, Zoom } from "@material-ui/core";
 import ModalContent from "../ModalContent";
 import { ParkingWrapper, Exchange, Slot, Slots, SlotSpace, SlotHorizontal, SlotsHalf } from "./styles";
 import { User } from "../../../features/types";
+import ModalOrangeContent from "../ModalOrangeContent";
+import { Transition } from "react-transition-group";
 
 const ParkingVisualisation: FunctionComponent = () => {
   const { reservations, loading } = useSelector(selectReservations);
   const [reservedArray, setReservedArray] = useState<Array<string>>([]);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isOrangeModalOpen, setOrangeModal] = useState(false);
   const [selectedParkingSlot, setSelectedParkingSlot] = useState<string | null>(null);
   const user: User = useSelector(selectUser);
 
@@ -24,7 +27,7 @@ const ParkingVisualisation: FunctionComponent = () => {
       setReservedArray(pomArray);
     }
   }, [reservations]);
- 
+
   const getStatus = (slot_id: string) => {
     const findedReservation = reservations?.find((r) => r.parking_slot_id === slot_id);
     if (findedReservation) return findedReservation.status;
@@ -33,7 +36,10 @@ const ParkingVisualisation: FunctionComponent = () => {
 
   const handleModal = (parkingId: string) => {
     setSelectedParkingSlot(parkingId);
-    setModalOpen(true);
+    const status = getStatus(parkingId);
+    console.log(status);
+    if (status === "RESERVED") setOrangeModal(true);
+    else if (status === "FREE") setModalOpen(true);
   };
 
   return (
@@ -44,8 +50,32 @@ const ParkingVisualisation: FunctionComponent = () => {
         </div>
       ) : (
         <>
-          <Modal open={isModalOpen} onClose={() => setModalOpen(false)}>
-            <ModalContent closeModal={() => setModalOpen(false)} parkingId={selectedParkingSlot} />
+          <Modal
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              timeout: 500,
+            }}
+            closeAfterTransition
+            open={isModalOpen}
+            onClose={() => setModalOpen(false)}
+          >
+            <Fade in={isModalOpen}>
+              <ModalContent closeModal={() => setModalOpen(false)} parkingId={selectedParkingSlot} />
+            </Fade>
+          </Modal>
+
+          <Modal
+            BackdropComponent={Backdrop}
+            BackdropProps={{
+              timeout: 500,
+            }}
+            closeAfterTransition
+            open={isOrangeModalOpen}
+            onClose={() => setOrangeModal(false)}
+          >
+            <Fade in={isOrangeModalOpen}>
+              <ModalOrangeContent closeModal={() => setOrangeModal(false)} parkingId={selectedParkingSlot} />
+            </Fade>
           </Modal>
           <Exchange>
             <i className="fas fa-exchange-alt"></i>
