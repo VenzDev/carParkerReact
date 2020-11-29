@@ -72,7 +72,7 @@ const DateSelectors: FunctionComponent<IProps> = ({ getDate }) => {
           </Order>
           <TimePicker
             margin="normal"
-            id="time-picker"
+            id="time-picker1"
             label="Start time"
             value={startHour}
             onChange={handleStartHour}
@@ -83,7 +83,7 @@ const DateSelectors: FunctionComponent<IProps> = ({ getDate }) => {
           />
           <TimePicker
             margin="normal"
-            id="time-picker"
+            id="time-picker2"
             label="End time"
             value={endHour}
             onChange={handleEndHour}

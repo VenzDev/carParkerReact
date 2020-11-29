@@ -41,7 +41,7 @@ const Flex = styled.div`
 `;
 
 interface IArrow {
-  rotate: boolean;
+  rotate: number;
 }
 
 const Arrow = styled.div`
@@ -55,7 +55,7 @@ const Arrow = styled.div`
   justify-content: center;
   color: white;
   transition: 0.3s;
-  transform: ${({ rotate }: IArrow) => rotate && "rotate(180deg)"};
+  transform: ${({ rotate }: IArrow) => (rotate ? "rotate(180deg)" : "rotate(0deg)")};
 `;
 
 const LogoImg = styled.img`
@@ -126,11 +126,12 @@ const Header: FunctionComponent<RouteComponentProps> = ({ history }) => {
       </Flex>
       <Flex>
         <p onClick={() => setUserMenu(!isUserMenu)}>{user.name}</p>
-        <Arrow onClick={() => setUserMenu(!isUserMenu)} rotate={isUserMenu}>
+        <Arrow onClick={() => setUserMenu(!isUserMenu)} rotate={isUserMenu ? 1 : 0}>
           <i className="fas fa-angle-down"></i>
         </Arrow>
         <Logout
           animate={isUserMenu ? "open" : "closed"}
+          initial={false}
           transition={{ duration: 0.5, times: [0, 0.5], ease: "easeInOut", delay: 0 }}
           variants={variants}
         >

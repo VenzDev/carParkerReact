@@ -1,22 +1,17 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectReservations } from "../../../features/Reservations/slice";
-import { selectUser } from "../../../features/User/slice";
 import Spinner from "../../Reusable/Spinner";
-import { Backdrop, Fade, Modal, Zoom } from "@material-ui/core";
+import { Backdrop, Fade, Modal } from "@material-ui/core";
 import ModalContent from "../ModalContent";
 import { ParkingWrapper, Exchange, Slot, Slots, SlotSpace, SlotHorizontal, SlotsHalf } from "./styles";
-import { User } from "../../../features/types";
 import ModalOrangeContent from "../ModalOrangeContent";
-import { Transition } from "react-transition-group";
 
 const ParkingVisualisation: FunctionComponent = () => {
   const { reservations, loading } = useSelector(selectReservations);
-  const [reservedArray, setReservedArray] = useState<Array<string>>([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [isOrangeModalOpen, setOrangeModal] = useState(false);
   const [selectedParkingSlot, setSelectedParkingSlot] = useState<number | null>(null);
-  const user: User = useSelector(selectUser);
 
   const getStatus = (slot_id: number) => {
     if (reservations) return reservations[slot_id];

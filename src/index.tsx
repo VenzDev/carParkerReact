@@ -10,15 +10,13 @@ import { Provider } from "react-redux";
 import "./i18n";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <Suspense fallback={<div />}>
-        <Router>
-          <App />
-        </Router>
-      </Suspense>
-    </Provider>
-  </React.StrictMode>,
+  <Provider store={store}>
+    <Suspense fallback={<div />}>
+      <Router>
+        <App />
+      </Router>
+    </Suspense>
+  </Provider>,
   document.getElementById("root")
 );
 

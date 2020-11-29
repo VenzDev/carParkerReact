@@ -85,7 +85,7 @@ const SelectedTicket: FunctionComponent<Props> = ({ ticket }) => {
       setFetchTicket(data);
     };
     fetchData();
-  }, []);
+  }, []); // eslint-disable-line
 
   const handleSubmit = () => {
     addTicketMessage(message).then((res) => {

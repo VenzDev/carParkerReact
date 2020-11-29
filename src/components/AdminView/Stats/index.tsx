@@ -21,18 +21,13 @@ const Stats: FunctionComponent = () => {
     setData(data);
   };
 
-  const handleFromDate = (date: Date | null) => {
-    setFromDate(date);
-    if (date && toDate) getPercentageStatus(date, toDate);
-  };
-  const handleToDate = (date: Date | null) => {
-    setToDate(date);
-    if (date && fromDate) getPercentageStatus(fromDate, date);
-  };
+  const handleFromDate = (date: Date | null) => setFromDate(date);
+
+  const handleToDate = (date: Date | null) => setToDate(date);
 
   useEffect(() => {
     if (fromDate && toDate) getPercentageStatus(fromDate, toDate);
-  }, []);
+  }, [fromDate, toDate]);
 
   const pieData = [
     { name: "zajęte", value: data.percentage },

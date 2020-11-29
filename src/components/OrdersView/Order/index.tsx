@@ -41,18 +41,6 @@ const ParkingId = styled.p`
   font-size: 1.4rem;
 `;
 
-const Time = styled.div`
-  background-color: ${({ theme }) => theme.color.blueDark};
-  color: white;
-  font-size: 1.8rem;
-  width: 150px;
-  height: 50px;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
 const CancelButton = styled.button`
   position: absolute;
   border: none;
@@ -82,7 +70,7 @@ interface IOrder {
 
 const Order: FunctionComponent<IOrder> = ({ reservation, reload }) => {
   const [isModalOpen, setModalOpen] = useState(false);
-  console.log(reservation);
+
   const handleStatusMessage = () => {
     if (to_close > 0 && to_open === 0 && status === "RESERVED") return `${status} (waiting for RFID card)`;
     if (to_close === 0 && to_open === 0 && status === "RESERVED") return "WAITING FOR ARCHIVE";

@@ -28,13 +28,18 @@ const ModalOrangeContent: FunctionComponent<IModalContent> = ({ parkingId, close
   const dispatch = useDispatch();
 
   useEffect(() => {
-    getAvailableReservations({ to: times.endTime, from: times.startTime, parking_slot_id: parkingId!.toString() }).then(
-      (data) => {
+    const fetchFromApi = () => {
+      getAvailableReservations({
+        to: times.endTime,
+        from: times.startTime,
+        parking_slot_id: parkingId!.toString(),
+      }).then((data) => {
         setAvailableReservations(data);
         setLoading(false);
-      }
-    );
-  }, []);
+      });
+    };
+    fetchFromApi();
+  }, []); // eslint-disable-line
 
   const handleSelect = (timers: Array<string>) => {
     setSelectedReservation(timers);
