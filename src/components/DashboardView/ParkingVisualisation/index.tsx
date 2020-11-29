@@ -15,30 +15,18 @@ const ParkingVisualisation: FunctionComponent = () => {
   const [reservedArray, setReservedArray] = useState<Array<string>>([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [isOrangeModalOpen, setOrangeModal] = useState(false);
-  const [selectedParkingSlot, setSelectedParkingSlot] = useState<string | null>(null);
+  const [selectedParkingSlot, setSelectedParkingSlot] = useState<number | null>(null);
   const user: User = useSelector(selectUser);
 
-  useEffect(() => {
-    if (reservations && reservations.length !== 0) {
-      let pomArray: Array<string> = [];
-      reservations.forEach((r) => {
-        pomArray.push(r.id);
-      });
-      setReservedArray(pomArray);
-    }
-  }, [reservations]);
-
-  const getStatus = (slot_id: string) => {
-    const findedReservation = reservations?.find((r) => r.parking_slot_id === slot_id);
-    if (findedReservation) return findedReservation.status;
-    return "FREE";
+  const getStatus = (slot_id: number) => {
+    if (reservations) return reservations[slot_id];
+    return "BUSY";
   };
 
-  const handleModal = (parkingId: string) => {
+  const handleModal = (parkingId: number) => {
     setSelectedParkingSlot(parkingId);
-    const status = getStatus(parkingId);
-    console.log(status);
-    if (status === "RESERVED") setOrangeModal(true);
+    const status = getStatus(parkingId - 1);
+    if (status === ("AVAILABLE_RESERVATION" || "BUSY")) setOrangeModal(true);
     else if (status === "FREE") setModalOpen(true);
   };
 
@@ -81,89 +69,89 @@ const ParkingVisualisation: FunctionComponent = () => {
             <i className="fas fa-exchange-alt"></i>
           </Exchange>
           <Slots>
-            <Slot status={getStatus("1")} onClick={() => handleModal("1")}>
+            <Slot status={getStatus(0)} onClick={() => handleModal(1)}>
               1
             </Slot>
-            <Slot status={getStatus("2")} onClick={() => handleModal("2")}>
+            <Slot status={getStatus(1)} onClick={() => handleModal(2)}>
               2
             </Slot>
-            <Slot status={getStatus("3")} onClick={() => handleModal("3")}>
+            <Slot status={getStatus(2)} onClick={() => handleModal(3)}>
               3
             </Slot>
-            <Slot status={getStatus("4")} onClick={() => handleModal("4")}>
+            <Slot status={getStatus(3)} onClick={() => handleModal(4)}>
               4
             </Slot>
-            <Slot status={getStatus("5")} onClick={() => handleModal("5")}>
+            <Slot status={getStatus(4)} onClick={() => handleModal(5)}>
               5
             </Slot>
-            <Slot status={getStatus("6")} onClick={() => handleModal("6")}>
+            <Slot status={getStatus(5)} onClick={() => handleModal(6)}>
               6
             </Slot>
-            <Slot status={getStatus("7")} onClick={() => handleModal("7")}>
+            <Slot status={getStatus(6)} onClick={() => handleModal(7)}>
               7
             </Slot>
-            <Slot status={getStatus("8")} onClick={() => handleModal("8")}>
+            <Slot status={getStatus(7)} onClick={() => handleModal(8)}>
               8
             </Slot>
           </Slots>
           <SlotSpace />
           <Slots>
             <SlotsHalf>
-              <SlotHorizontal status={getStatus("9")} onClick={() => handleModal("9")}>
+              <SlotHorizontal status={getStatus(8)} onClick={() => handleModal(9)}>
                 9
               </SlotHorizontal>
-              <SlotHorizontal status={getStatus("10")} onClick={() => handleModal("10")}>
+              <SlotHorizontal status={getStatus(9)} onClick={() => handleModal(10)}>
                 10
               </SlotHorizontal>
             </SlotsHalf>
             <SlotsHalf>
-              <SlotHorizontal status={getStatus("11")} onClick={() => handleModal("11")}>
+              <SlotHorizontal status={getStatus(10)} onClick={() => handleModal(11)}>
                 11
               </SlotHorizontal>
             </SlotsHalf>
           </Slots>
           <Slots>
             <SlotsHalf>
-              <SlotHorizontal status={getStatus("12")} onClick={() => handleModal("12")}>
+              <SlotHorizontal status={getStatus(11)} onClick={() => handleModal(12)}>
                 12
               </SlotHorizontal>
-              <SlotHorizontal status={getStatus("13")} onClick={() => handleModal("13")}>
+              <SlotHorizontal status={getStatus(12)} onClick={() => handleModal(13)}>
                 13
               </SlotHorizontal>
             </SlotsHalf>
             <SlotsHalf>
-              <SlotHorizontal status={getStatus("14")} onClick={() => handleModal("14")}>
+              <SlotHorizontal status={getStatus(13)} onClick={() => handleModal(14)}>
                 14
               </SlotHorizontal>
-              <SlotHorizontal status={getStatus("15")} onClick={() => handleModal("15")}>
+              <SlotHorizontal status={getStatus(14)} onClick={() => handleModal(15)}>
                 15
               </SlotHorizontal>
             </SlotsHalf>
           </Slots>
           <SlotSpace />
           <Slots>
-            <Slot status={getStatus("16")} onClick={() => handleModal("16")}>
+            <Slot status={getStatus(15)} onClick={() => handleModal(16)}>
               16
             </Slot>
-            <Slot status={getStatus("17")} onClick={() => handleModal("17")}>
+            <Slot status={getStatus(16)} onClick={() => handleModal(17)}>
               17
             </Slot>
-            <Slot status={getStatus("18")} onClick={() => handleModal("18")}>
+            <Slot status={getStatus(17)} onClick={() => handleModal(18)}>
               18
             </Slot>
-            <Slot status={getStatus("19")} onClick={() => handleModal("19")}>
+            <Slot status={getStatus(18)} onClick={() => handleModal(19)}>
               19
             </Slot>
-            <Slot status={getStatus("20")} onClick={() => handleModal("20")}>
+            <Slot status={getStatus(19)} onClick={() => handleModal(20)}>
               20
             </Slot>
-            <Slot status={getStatus("21")} onClick={() => handleModal("21")}>
+            <Slot status={getStatus(20)} onClick={() => handleModal(21)}>
               21
             </Slot>
-            <Slot status={getStatus("22")} onClick={() => handleModal("22")}>
+            <Slot status={getStatus(21)} onClick={() => handleModal(22)}>
               22
             </Slot>
-            <Slot status={getStatus("23")} onClick={() => handleModal("23")}>
+            <Slot status={getStatus(22)} onClick={() => handleModal(23)}>
               23
             </Slot>
           </Slots>

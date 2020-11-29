@@ -6,10 +6,10 @@ import Spinner from "../../Reusable/Spinner";
 import { reserveSlot, auth, checkParking } from "../../../api/Api";
 import { setReservations } from "../../../features/Reservations/slice";
 import { login } from "../../../features/User/slice";
-import { Content, RelativeGradientButton, SuccessIcon, CloseButton } from "./styles";
+import { Content, RelativeGradientButton, SuccessIcon, CloseButton, WarningIcon } from "./styles";
 
 interface IModalContent {
-  parkingId: string | null;
+  parkingId: number | null;
   closeModal: () => void;
 }
 
@@ -19,6 +19,7 @@ const FAILED_STATUS = "FAILED_STATUS";
 
 const ModalContent: FunctionComponent<IModalContent> = ({ parkingId, closeModal }) => {
   const [isLoading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [modalState, setModalState] = useState(CONFIRM_STATUS);
   const times = useSelector(selectTimes);
   const user = useSelector(selectUser);
@@ -26,12 +27,20 @@ const ModalContent: FunctionComponent<IModalContent> = ({ parkingId, closeModal 
 
   const handleSubmit = async () => {
     if (parkingId && times.startTime && times.endTime && user.user_id)
-      await reserveSlot({
-        parking_slot_id: parkingId,
-        from: times.startTime,
-        to: times.endTime,
-        user_id: user.user_id,
-      });
+      try {
+        await reserveSlot({
+          parking_slot_id: parkingId,
+          from: times.startTime,
+          to: times.endTime,
+          user_id: user.user_id,
+        });
+        setLoading(false);
+        setModalState(SUCCESS_STATUS);
+      } catch (err) {
+        setErrorMessage(err.response.data.message);
+        setLoading(false);
+        setModalState(FAILED_STATUS);
+      }
 
     //refresh user data in application
     const fetchedUser = await auth();
@@ -41,6 +50,7 @@ const ModalContent: FunctionComponent<IModalContent> = ({ parkingId, closeModal 
         user_id: fetchedUser.data.id,
         active_reservations: fetchedUser.data.reservations.length,
         cars_on_parking: fetchedUser.data.cars_on_parking,
+        role: fetchedUser.data.role,
       })
     );
 
@@ -49,9 +59,6 @@ const ModalContent: FunctionComponent<IModalContent> = ({ parkingId, closeModal 
       const response = await checkParking({ to: times.endTime, from: times.startTime });
       dispatch(setReservations(response.data));
     }
-
-    setLoading(false);
-    setModalState(SUCCESS_STATUS);
   };
   return (
     <Content>
@@ -84,7 +91,10 @@ const ModalContent: FunctionComponent<IModalContent> = ({ parkingId, closeModal 
       )}
       {modalState === FAILED_STATUS && (
         <>
-          <h2>Something went wrong!</h2>
+          <WarningIcon>
+            <i className="far fa-frown-open"></i>
+          </WarningIcon>
+          <p>{errorMessage}</p>
           <RelativeGradientButton onClick={closeModal}>Close</RelativeGradientButton>
         </>
       )}

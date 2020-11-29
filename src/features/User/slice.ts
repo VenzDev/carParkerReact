@@ -7,8 +7,10 @@ const initialState: User = {
   name: null,
   user_id: null,
   active_reservations: null,
-  active_account: false,
+  isActive: false,
   cars_on_parking: null,
+  role: null,
+  has_ticket: false,
 };
 
 const status = createStatusSlice("userData");
@@ -22,6 +24,9 @@ export const slice = createSlice({
       state.user_id = action.payload.user_id;
       state.active_reservations = action.payload.active_reservations;
       state.cars_on_parking = action.payload.cars_on_parking;
+      state.isActive = action.payload.isActive;
+      state.role = action.payload.role;
+      state.has_ticket = action.payload.has_ticket;
     },
     logout: (state, action) => {
       state.name = null;

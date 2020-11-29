@@ -10,6 +10,7 @@ import Spinner from "./components/Reusable/Spinner";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
+import Admin from "./pages/Admin";
 
 const LoadingDiv = styled.div`
   display: flex;
@@ -45,6 +46,9 @@ function App() {
               </Route>
               <Route exact path="/dashboard/account">
                 <Account />
+              </Route>
+              <Route exact path="/dashboard/admin">
+                <Admin />
               </Route>
               <Route exact path="/dashboard/support">
                 <Support />

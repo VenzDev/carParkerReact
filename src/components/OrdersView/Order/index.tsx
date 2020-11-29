@@ -3,6 +3,7 @@ import React, { FunctionComponent, useState } from "react";
 import { Reservation } from "../../../features/types";
 import { styled } from "../../../styles/theme";
 import ModalCancel from "../ModalCancel";
+import Timer from "../Timer";
 
 const Wrapper = styled.div`
   position: relative;
@@ -81,9 +82,10 @@ interface IOrder {
 
 const Order: FunctionComponent<IOrder> = ({ reservation, reload }) => {
   const [isModalOpen, setModalOpen] = useState(false);
+  console.log(reservation);
   const handleStatusMessage = () => {
-    if (to_close && !to_open && status === "RESERVED") return `${status} (waiting for RFID card)`;
-    if (!to_close && !to_open && status === "RESERVED") return "WAITING FOR ARCHIVE";
+    if (to_close > 0 && to_open === 0 && status === "RESERVED") return `${status} (waiting for RFID card)`;
+    if (to_close === 0 && to_open === 0 && status === "RESERVED") return "WAITING FOR ARCHIVE";
     return status;
   };
 
@@ -129,7 +131,7 @@ const Order: FunctionComponent<IOrder> = ({ reservation, reload }) => {
         <p>{to_open ? "You can put your RFID card on scanner in" : "Your reservation is still active for"}</p>
       </OrderStatusWrapper>
       <OrderTime>
-        <Time>{(to_open && to_open) || (to_close && to_close) || (to_system_close && to_system_close)}</Time>
+        <Timer time={to_open || to_close || to_system_close} />
       </OrderTime>
     </Wrapper>
   );

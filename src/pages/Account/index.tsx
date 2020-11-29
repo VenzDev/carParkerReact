@@ -46,6 +46,10 @@ const Warning = styled.p`
   color: ${({ theme }) => theme.color.warning};
 `;
 
+const Span = styled.span`
+  margin-left: 1rem;
+`;
+
 const Account: FunctionComponent = () => {
   const user = useSelector(selectUser);
   return (
@@ -56,8 +60,9 @@ const Account: FunctionComponent = () => {
           <i className="far fa-user"></i>
           <p>{user.name}</p>
         </UserName>
+        <Span>Active reservations: {user.active_reservations}</Span>
         <ActiveAccount>
-          {user.active_account ? (
+          {user.isActive ? (
             <Active>Account active, feel free to use the application</Active>
           ) : (
             <>

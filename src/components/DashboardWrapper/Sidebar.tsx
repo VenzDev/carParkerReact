@@ -142,6 +142,14 @@ const Sidebar: FunctionComponent = () => {
               <span>Account</span>
             </NavItem>
           </StyledNavLinkSidebar>
+          {user.role === "ADMIN" && (
+            <StyledNavLinkSidebar exact to="/dashboard/admin">
+              <NavItem>
+                <i className="fas fa-user-shield"></i>
+                <span>Admin</span>
+              </NavItem>
+            </StyledNavLinkSidebar>
+          )}
           <StyledNavLinkSidebar exact to="/dashboard/support">
             <NavItem>
               <i className="fas fa-question-circle"></i>

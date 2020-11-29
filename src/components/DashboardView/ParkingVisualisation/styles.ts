@@ -61,20 +61,22 @@ export const Slot = styled.div`
 
   background-color: ${({ status }: ISlot) => {
     if (status === "FREE") return "#1eff00";
-    else if (status === "RESERVED") return "#ffc800";
+    else if (status === "AVAILABLE_RESERVATION") return "#ffc800";
+    else if (status === "BUSY") return "#e80000";
   }};
 
   box-shadow: ${({ status }: ISlot) => {
     if (status === "FREE") return "2px 6px 12px rgba(30, 255, 0, 0.3)";
-    else if (status === "RESERVED") return "2px 6px 12px rgba(255, 200, 0, 0.3)";
+    else if (status === "AVAILABLE_RESERVATION") return "2px 6px 12px rgba(255, 200, 0, 0.3)";
+    else if (status === "BUSY") return "2px 6px 12px rgba(232, 0, 0, 0.3)";
   }};
 
-  cursor: pointer;
+  cursor: ${({ status }: ISlot) => (status === "FREE" || status === "AVAILABLE_RESERVATION" ? "pointer" : "inherit")};
 
   &:hover {
     box-shadow: ${({ status }: ISlot) => {
       if (status === "FREE") return "2px 6px 12px rgba(30, 255, 0, 0.9)";
-      else if (status === "RESERVED") return "2px 6px 12px rgba(255, 200, 0, 0.9)";
+      else if (status === "AVAILABLE_RESERVATION") return "2px 6px 12px rgba(255, 200, 0, 0.9)";
     }};
   }
 
@@ -128,15 +130,17 @@ export const SlotHorizontal = styled.div`
 
   background-color: ${({ status }: ISlot) => {
     if (status === "FREE") return "#1eff00";
-    else if (status === "RESERVED") return "#ffc800";
+    else if (status === "AVAILABLE_RESERVATION") return "#ffc800";
+    else if (status === "BUSY") return "#e80000";
   }};
 
   box-shadow: ${({ status }: ISlot) => {
     if (status === "FREE") return "2px 6px 12px rgba(30, 255, 0, 0.3)";
-    else if (status === "RESERVED") return "2px 6px 12px rgba(255, 200, 0, 0.3)";
+    else if (status === "AVAILABLE_RESERVATION") return "2px 6px 12px rgba(255, 200, 0, 0.3)";
+    else if (status === "BUSY") return "2px 6px 12px rgba(232, 0, 0, 0.3)";
   }};
 
-  cursor: ${({ status }: ISlot) => (status === "FREE" ? "pointer" : "inherit")};
+  cursor: ${({ status }: ISlot) => (status === "FREE" || status === "AVAILABLE_RESERVATION" ? "pointer" : "inherit")};
 
   &:hover {
     box-shadow: ${({ status }: ISlot) => {

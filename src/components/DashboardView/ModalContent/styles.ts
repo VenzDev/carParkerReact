@@ -21,6 +21,11 @@ export const SuccessIcon = styled.div`
   color: ${({ theme }) => theme.color.blueLight};
 `;
 
+export const WarningIcon = styled.div`
+  font-size: 4rem;
+  color: ${({ theme }) => theme.color.warning};
+`;
+
 export const RelativeGradientButton = styled(GradientButton)`
   position: relative;
   min-width: 150px;

@@ -1,5 +1,12 @@
 import axios from "axios";
-import { AvailableReservationsData, CheckDates, LoginData, RegisterData, ReserveSlot } from "../features/types";
+import {
+  AvailableReservationsData,
+  CheckDates,
+  CreateTicket,
+  LoginData,
+  RegisterData,
+  ReserveSlot,
+} from "../features/types";
 
 let Api = axios.create({
   baseURL: "http://localhost:8000/api",
@@ -70,6 +77,41 @@ export const getAvailableReservations = async (data: AvailableReservationsData) 
 export const cancelReservation = async (reservation_id: string) => {
   await Api.get("/csrf-cookie");
   await Api.post("/cancelReservation", { reservation_id });
+};
+
+export const percentageStatus = async (dates: CheckDates) => {
+  await Api.get("/csrf-cookie");
+  const fetchedData = await Api.post("/percentageStatus", dates);
+  return fetchedData.data;
+};
+
+export const createTicket = async (data: CreateTicket) => {
+  await Api.get("/csrf-cookie");
+  await Api.post("/createTicket", data);
+};
+
+export const getUserTicket = async () => {
+  await Api.get("/csrf-cookie");
+  const fetchedData = await Api.get("/getUserTicket");
+  return fetchedData.data;
+};
+
+export const addTicketMessage = async (message: string) => {
+  await Api.get("/csrf-cookie");
+  const fetchedData = await Api.post("/addTicketMessage", { message });
+  return fetchedData.data;
+};
+
+export const getTickets = async () => {
+  await Api.get("/csrf-cookie");
+  const fetchedData = await Api.get("/getTickets");
+  return fetchedData.data;
+};
+
+export const getTicketById = async (id: number) => {
+  await Api.get("/csrf-cookie");
+  const fetchedData = await Api.post("/getTicketById", { id });
+  return fetchedData.data;
 };
 
 export default Api;

@@ -1,9 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../store";
-import { Reservation } from "../types";
 
 interface ReservationsState {
-  reservations: Array<Reservation> | null;
+  reservations: Array<string> | null;
   loading: boolean;
 }
 

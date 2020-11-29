@@ -35,12 +35,16 @@ const DashboardWrapper: FunctionComponent<DashboardWrapper> = ({ children, histo
     async function authUser() {
       try {
         const user = await auth();
+        console.log(user);
         dispatch(
           login({
             name: user.data.name,
             user_id: user.data.id,
             active_reservations: user.data.reservations.length,
             cars_on_parking: user.data.cars_on_parking,
+            isActive: user.data.is_active,
+            role: user.data.role,
+            has_ticket: user.data.has_ticket,
           })
         );
         setLoading(false);

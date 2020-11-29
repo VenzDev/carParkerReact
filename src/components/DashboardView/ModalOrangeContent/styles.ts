@@ -68,3 +68,14 @@ export const ReservationContent = styled.div`
     border-bottom: none;
   }
 `;
+
+export const SuccessIcon = styled.div`
+  font-size: 4rem;
+  color: ${({ theme }) => theme.color.blueLight};
+`;
+
+export const FlexDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;

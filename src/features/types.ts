@@ -14,8 +14,10 @@ export interface User {
   user_id: number | null;
   name: string | null;
   active_reservations: number | null;
-  active_account: boolean;
+  isActive: boolean;
   cars_on_parking: number | null;
+  role: string | null;
+  has_ticket: boolean;
 }
 
 export interface Reservation {
@@ -25,11 +27,11 @@ export interface Reservation {
   system_reservation_from: string;
   system_reservation_to: string;
   reservation_to: string;
-  parking_slot_id: string;
+  parking_slot_id: number;
   status: string;
-  to_open: string | null;
-  to_close: string | null;
-  to_system_close: string | null;
+  to_open: number;
+  to_close: number;
+  to_system_close: number;
   can_cancel: boolean;
 }
 
@@ -42,11 +44,22 @@ export interface ReserveSlot {
   user_id: number;
   from: string;
   to: string;
-  parking_slot_id: string;
+  parking_slot_id: number;
 }
 
 export interface AvailableReservationsData {
   from: string | null;
   to: string | null;
   parking_slot_id: string | null;
+}
+
+export interface CreateTicket {
+  title: string;
+  message: string;
+}
+
+export interface Ticket {
+  id: number;
+  title: string;
+  messages: Array<Array<string>>;
 }
