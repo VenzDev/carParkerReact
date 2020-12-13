@@ -1,11 +1,9 @@
 import React, { ChangeEvent, FunctionComponent, useEffect, useState } from "react";
 import { addTicketMessage, getTicketById } from "../../../api/Api";
-import { Ticket, User } from "../../../features/types";
-import styled from "styled-components";
+import { Ticket } from "../../../features/types";
+import { styled } from "../../../styles/theme";
 import { GradientButton } from "../../Button";
 import Spinner from "../../Reusable/Spinner";
-import { useSelector } from "react-redux";
-import { selectUser } from "../../../features/User/slice";
 
 const Wrapper = styled.div`
   position: relative;
@@ -65,15 +63,36 @@ const CenterGradientButton = styled(GradientButton)`
   margin: 1rem auto;
 `;
 
+const SpinnerWrapper = styled.div`
+  position: relative;
+  min-height: calc(100vh - 300px);
+`;
+
+const Title = styled.p`
+  width: 80%;
+  margin: 1rem auto;
+  font-size: 1.2rem;
+`;
+
+const BackButton = styled.button`
+  color: white;
+  background-color: ${({ theme }) => theme.color.blueDark};
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+`;
+
 interface Props {
-  ticket: Ticket;
+  ticketId: number;
+  handleBackToList: () => void;
 }
 
-const SelectedTicket: FunctionComponent<Props> = ({ ticket }) => {
+const SelectedTicket: FunctionComponent<Props> = ({ ticketId, handleBackToList }) => {
   const [fetchTicket, setFetchTicket] = useState<Ticket | null>(null);
   const [message, setMessage] = useState("");
+  const [isTicketLoading, setTicketLoading] = useState(true);
   const [isLoading, setLoading] = useState(false);
-  const user: User = useSelector(selectUser);
 
   const handleMessage = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.currentTarget.value);
@@ -81,18 +100,20 @@ const SelectedTicket: FunctionComponent<Props> = ({ ticket }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getTicketById(ticket.id);
+      const data = await getTicketById(ticketId);
+      setTicketLoading(false);
       setFetchTicket(data);
     };
     fetchData();
   }, []); // eslint-disable-line
 
   const handleSubmit = () => {
-    addTicketMessage(message).then((res) => {
-      setMessage("");
-      setFetchTicket(res);
-      setLoading(false);
-    });
+    if (fetchTicket)
+      addTicketMessage({ content: message, ticket_id: fetchTicket.id }).then((res) => {
+        setMessage("");
+        setFetchTicket(res);
+        setLoading(false);
+      });
   };
 
   const handleClick = () => {
@@ -100,16 +121,21 @@ const SelectedTicket: FunctionComponent<Props> = ({ ticket }) => {
     handleSubmit();
   };
 
-  return (
+  return isTicketLoading ? (
+    <SpinnerWrapper>
+      <Spinner />
+    </SpinnerWrapper>
+  ) : (
     <div>
-      {fetchTicket && <p>{ticket.title}</p>}
+      <BackButton onClick={handleBackToList}>Back to all tickets</BackButton>
+      {fetchTicket && <Title>{fetchTicket.title}</Title>}
       {fetchTicket &&
         fetchTicket.messages.map((message, id) => (
           <Wrapper key={id}>
-            <div>{message[1]}</div>
+            <div>{message.content}</div>
             <div>
-              <i className="far fa-user"></i>
-              <p>{message[0] === "USER" ? user.name : "Admin"}</p>
+              <i className="far fa-user" />
+              <p>{message.user.role === "USER" ? message.user.name : "Admin"}</p>
             </div>
           </Wrapper>
         ))}

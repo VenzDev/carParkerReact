@@ -58,8 +58,22 @@ export interface CreateTicket {
   message: string;
 }
 
+export interface Message {
+  content: string;
+  user: {
+    id: number;
+    name: string;
+    role: string;
+  };
+}
+
 export interface Ticket {
   id: number;
   title: string;
-  messages: Array<Array<string>>;
+  messages: Array<Message>;
+}
+
+export interface AddTicketProps {
+  ticket_id: number;
+  content: string;
 }

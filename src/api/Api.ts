@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  AddTicketProps,
   AvailableReservationsData,
   CheckDates,
   CreateTicket,
@@ -36,8 +37,7 @@ export const register = async (credentials: RegisterData) => {
 
 export const auth = async () => {
   await Api.get("/csrf-cookie");
-  const data = await Api.get("/user");
-  return data;
+  return await Api.get("/user");
 };
 
 export const logout = async () => {
@@ -47,8 +47,7 @@ export const logout = async () => {
 
 export const checkParking = async (dates: CheckDates) => {
   await Api.get("/csrf-cookie");
-  const data = Api.post("/checkParking", dates);
-  return data;
+  return await Api.post("/checkParking", dates);
 };
 
 export const reserveSlot = async (credentials: ReserveSlot) => {
@@ -59,12 +58,6 @@ export const reserveSlot = async (credentials: ReserveSlot) => {
 export const getActiveReservations = async () => {
   await Api.get("/csrf-cookie");
   const fetchedData = await Api.get("/active_reservations");
-  return fetchedData.data;
-};
-
-export const carsOnParking = async () => {
-  await Api.get("/csrf-cookie");
-  const fetchedData = await Api.get("/carsOnParking");
   return fetchedData.data;
 };
 
@@ -96,9 +89,9 @@ export const getUserTicket = async () => {
   return fetchedData.data;
 };
 
-export const addTicketMessage = async (message: string) => {
+export const addTicketMessage = async (data: AddTicketProps) => {
   await Api.get("/csrf-cookie");
-  const fetchedData = await Api.post("/addTicketMessage", { message });
+  const fetchedData = await Api.post("/addTicketMessage", data);
   return fetchedData.data;
 };
 
@@ -112,6 +105,16 @@ export const getTicketById = async (id: number) => {
   await Api.get("/csrf-cookie");
   const fetchedData = await Api.post("/getTicketById", { id });
   return fetchedData.data;
+};
+
+export const deleteTicket = async (ticket_id: number) => {
+  await Api.get("/csrf-cookie");
+  await Api.post("/deleteTicket", { ticket_id });
+};
+
+export const setTicketAsFinished = async (ticket_id: number) => {
+  await Api.get("/csrf-cookie");
+  await Api.post("/setTicketAsActive", { ticket_id });
 };
 
 export default Api;
