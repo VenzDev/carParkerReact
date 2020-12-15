@@ -1,5 +1,5 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { deleteTicket, getTickets } from "../../../api/Api";
+import { deleteTicket, getTickets, setTicketAsFinished } from "../../../api/Api";
 import { Ticket } from "../../../features/types";
 import styled from "styled-components";
 import SelectedTicket from "./SelectedTicket";
@@ -35,6 +35,16 @@ const Wrapper = styled.div`
     > i {
       font-size: 2rem;
       margin-right: 1rem;
+      transition:0.2s;
+      cursor:pointer;
+    }
+
+    > i:first-child:hover {
+      color: green;
+    }
+
+    > i:last-child:hover {
+      color: red;
     }
   }
 `;
@@ -53,12 +63,13 @@ const AdminTickets: FunctionComponent = () => {
   const [isLoading, setLoading] = useState(true);
   const [status, setStatus] = useState(TICKETS);
 
+  const fetchData = async () => {
+    const data = await getTickets();
+    setTickets(data);
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await getTickets();
-      setTickets(data);
-      setLoading(false);
-    };
     fetchData();
   }, []);
 
@@ -73,8 +84,16 @@ const AdminTickets: FunctionComponent = () => {
   };
 
   const handleDelete = async (id: number) => {
+    setLoading(true);
     await deleteTicket(id);
+    fetchData();
   };
+
+  const handleFinished = async (id: number) => {
+    setLoading(true);
+    await setTicketAsFinished(id);
+    fetchData();
+  }
 
   return (
     <div>
@@ -83,18 +102,18 @@ const AdminTickets: FunctionComponent = () => {
           <Spinner />
         </SpinnerWrapper>
       ) : (
-        tickets.length > 0 &&
-        status === TICKETS &&
-        tickets.map((ticket) => (
-          <Wrapper key={ticket.id}>
-            <div onClick={() => handleClick(ticket)}>{ticket.title}</div>
-            <div>
-              <i className="fas fa-check" />
-              <i className="fas fa-trash" onClick={() => handleDelete(ticket.id)} />
-            </div>
-          </Wrapper>
-        ))
-      )}
+          tickets.length > 0 ?
+            status === TICKETS &&
+            tickets.map((ticket) => (
+              <Wrapper key={ticket.id}>
+                <div onClick={() => handleClick(ticket)}>{ticket.title}</div>
+                <div>
+                  <i className="fas fa-check" onClick={() => handleFinished(ticket.id)} />
+                  <i className="fas fa-trash" onClick={() => handleDelete(ticket.id)} />
+                </div>
+              </Wrapper>
+            )) : <div>No tickets</div>
+        )}
       {status === SELECTED && ticket && <SelectedTicket handleBackToList={handleBackToList} ticketId={ticket.id} />}
     </div>
   );

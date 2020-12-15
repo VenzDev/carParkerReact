@@ -114,7 +114,7 @@ export const deleteTicket = async (ticket_id: number) => {
 
 export const setTicketAsFinished = async (ticket_id: number) => {
   await Api.get("/csrf-cookie");
-  await Api.post("/setTicketAsActive", { ticket_id });
+  await Api.post("/setTicketAsFinished", { ticket_id });
 };
 
 export default Api;
