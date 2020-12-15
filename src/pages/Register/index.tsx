@@ -21,7 +21,7 @@ import { validInputs } from "../../utils/validators/validateRegister";
 import Spinner from "../../components/Reusable/Spinner";
 import { LOGIN, setToast } from "../../utils/toast";
 
-interface IProps extends RouteComponentProps {}
+interface IProps extends RouteComponentProps { }
 
 interface Error {
   fullName: string | null;
@@ -55,7 +55,7 @@ const Register: FunctionComponent<IProps> = ({ history }) => {
 
   const redirectToLogin = () => {
     setToast(LOGIN, "Successfully registered, now you can login");
-    history.push("/login");
+    history.push("/home/login");
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -63,7 +63,6 @@ const Register: FunctionComponent<IProps> = ({ history }) => {
     removeSpacesFromInputs();
 
     if (validInputs(data)) {
-      console.log(data);
       try {
         await register(data);
         redirectToLogin();

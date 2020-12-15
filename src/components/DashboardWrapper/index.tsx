@@ -25,13 +25,14 @@ const Content = styled.div`
   }
 `;
 
-interface DashboardWrapper extends RouteComponentProps {}
+interface DashboardWrapper extends RouteComponentProps { }
 
 const DashboardWrapper: FunctionComponent<DashboardWrapper> = ({ children, history }) => {
   const [isLoading, setLoading] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
+
     async function authUser() {
       try {
         const user = await auth();
@@ -48,24 +49,27 @@ const DashboardWrapper: FunctionComponent<DashboardWrapper> = ({ children, histo
         );
         setLoading(false);
       } catch (e) {
-        history.push("/login");
+        history.push("/home/login");
       }
     }
 
-    authUser();
+    if (!document.cookie.includes('XSRF-TOKEN')) {
+      history.push('/home');
+    } else
+      authUser();
   }, [dispatch, history]);
   return (
     <Wrapper>
       {isLoading ? (
         <Spinner />
       ) : (
-        <>
-          <Sidebar />
-          <Header />
-          <Content>{children}</Content>
-          <Footer />
-        </>
-      )}
+          <>
+            <Sidebar />
+            <Header />
+            <Content>{children}</Content>
+            <Footer />
+          </>
+        )}
     </Wrapper>
   );
 };

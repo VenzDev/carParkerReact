@@ -8,18 +8,18 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 
 import SideNavbar from "./SideNavbar";
 
-interface IHeader extends RouteComponentProps {}
+interface IHeader extends RouteComponentProps { }
 
 const Header: FunctionComponent<IHeader> = ({ history }) => {
   const { t, i18n } = useTranslation();
   const [isNavbarOpen, setNavbarOpen] = useState(false);
-  const [isHomePage, setHomePage] = useState(history.location.pathname === "/");
+  const [isHomePage, setHomePage] = useState(history.location.pathname === "/home");
 
   const handleNavbar = () => setNavbarOpen(!isNavbarOpen);
 
   useEffect(() => {
     const unlisten = history.listen((location) => {
-      if (location.pathname !== "/") setHomePage(false);
+      if (location.pathname !== "/home") setHomePage(false);
       else setHomePage(true);
     });
 
@@ -36,14 +36,14 @@ const Header: FunctionComponent<IHeader> = ({ history }) => {
     <StyledHeader>
       <FlexDiv>
         <LogoImg src={logo} alt="logo" />
-        <StyledLink to="/">
+        <StyledLink to="/home">
           <LogoText active={isHomePage}>Parker</LogoText>
         </StyledLink>
         <Fill />
-        <StyledLink to="/login">
+        <StyledLink to="/home/login">
           <LoginButton whileTap={{ scale: 0.85 }}>{t("login")}</LoginButton>
         </StyledLink>
-        <StyledLink to="/register">
+        <StyledLink to="/home/register">
           <RegisterButton whileTap={{ scale: 0.85 }}>{t("register")}</RegisterButton>
         </StyledLink>
         <p>

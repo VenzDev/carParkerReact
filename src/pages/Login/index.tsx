@@ -20,7 +20,7 @@ import { LoginData } from "../../features/types";
 import { setToast, DASHBOARD, LOGIN, isToast, IToast, Toast } from "../../utils/toast";
 import { Snackbar } from "@material-ui/core";
 
-interface IProps extends RouteComponentProps {}
+interface IProps extends RouteComponentProps { }
 
 interface Error {
   email: string | null;
@@ -52,7 +52,7 @@ const Login: FunctionComponent<IProps> = ({ history }) => {
       try {
         await login(data);
         setToast(DASHBOARD, "Successfully logged in");
-        history.push("/dashboard");
+        history.push("/");
         return;
       } catch (e) {
         setShakeWhenApiError(true);

@@ -45,20 +45,20 @@ const Active = styled.div`
 const Footer: FunctionComponent = () => {
   return (
     <FooterWrapper>
-      <Icon exact to="/dashboard">
+      <Icon exact to="/">
         <Active />
         <i className="fas fa-home"></i>
       </Icon>
 
-      <Icon exact to="/dashboard/orders">
+      <Icon exact to="/orders">
         <Active />
         <i className="fas fa-shopping-cart"></i>
       </Icon>
-      <Icon exact to="/dashboard/account">
+      <Icon exact to="/account">
         <Active />
         <i className="fas fa-user"></i>
       </Icon>
-      <Icon exact to="/dashboard/support">
+      <Icon exact to="/support">
         <Active />
         <i className="fas fa-question-circle"></i>
       </Icon>

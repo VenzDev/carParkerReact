@@ -120,13 +120,13 @@ const Sidebar: FunctionComponent = () => {
       </Flex>
       <Grow>
         <Sticky>
-          <StyledNavLinkSidebar exact to="/dashboard">
+          <StyledNavLinkSidebar exact to="/">
             <NavItem>
               <i className="fas fa-home"></i>
               <span>Dashboard</span>
             </NavItem>
           </StyledNavLinkSidebar>
-          <StyledNavLinkSidebar exact to="/dashboard/orders">
+          <StyledNavLinkSidebar exact to="/orders">
             <NavItem>
               <i className="fas fa-shopping-cart">
                 {user.active_reservations !== null && user.active_reservations > 0 && (
@@ -136,21 +136,21 @@ const Sidebar: FunctionComponent = () => {
               <span>Reservations</span>
             </NavItem>
           </StyledNavLinkSidebar>
-          <StyledNavLinkSidebar exact to="/dashboard/account">
+          <StyledNavLinkSidebar exact to="/account">
             <NavItem>
               <i className="fas fa-user"></i>
               <span>Account</span>
             </NavItem>
           </StyledNavLinkSidebar>
           {user.role === "ADMIN" && (
-            <StyledNavLinkSidebar exact to="/dashboard/admin">
+            <StyledNavLinkSidebar exact to="/admin">
               <NavItem>
                 <i className="fas fa-user-shield"></i>
                 <span>Admin</span>
               </NavItem>
             </StyledNavLinkSidebar>
           )}
-          <StyledNavLinkSidebar exact to="/dashboard/support">
+          <StyledNavLinkSidebar exact to="/support">
             <NavItem>
               <i className="fas fa-question-circle"></i>
               <span>Support</span>

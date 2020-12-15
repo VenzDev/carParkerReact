@@ -46,13 +46,13 @@ const SideNavbar: FunctionComponent<ISideNavbar> = ({ isNavbarOpen, handleNavbar
             <LogoImg src={logo} alt="logo" />
             <LogoText active={true}>Parker</LogoText>
           </LogoNavbarContainer>
-          <StyledNavLink exact onClick={handleNavbar} to="/">
+          <StyledNavLink exact onClick={handleNavbar} to="/home">
             {t("home")}
           </StyledNavLink>
-          <StyledNavLink exact onClick={handleNavbar} to="/login">
+          <StyledNavLink exact onClick={handleNavbar} to="/home/login">
             {t("login")}
           </StyledNavLink>
-          <StyledNavLink exact onClick={handleNavbar} to="/register">
+          <StyledNavLink exact onClick={handleNavbar} to="/home/register">
             {t("register")}
           </StyledNavLink>
           <p>

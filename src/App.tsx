@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import styled, { ThemeProvider } from "styled-components";
 import { theme } from "./styles/theme";
 
@@ -24,12 +24,24 @@ const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Orders = lazy(() => import("./pages/Orders"));
 const Account = lazy(() => import("./pages/Account"));
 const Support = lazy(() => import("./pages/Support"));
+const NotFound = lazy(() => import("./pages/NotFound"));
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <Switch>
-        <Route path="/dashboard">
+        <Route path="/home">
+          <Wrapper>
+            <Switch>
+              <Route exact path="/home" component={Home} />
+              <Route exact path="/home/login" component={Login} />
+              <Route exact path="/home/register" component={Register} />
+              <Redirect to="/404" />
+            </Switch>
+          </Wrapper>
+        </Route>
+        <Route exact path="/404" component={NotFound} />
+        <Route path="/">
           <DashboardWrapper>
             <Suspense
               fallback={
@@ -38,36 +50,16 @@ function App() {
                 </LoadingDiv>
               }
             >
-              <Route exact path="/dashboard">
-                <Dashboard />
-              </Route>
-              <Route exact path="/dashboard/orders">
-                <Orders />
-              </Route>
-              <Route exact path="/dashboard/account">
-                <Account />
-              </Route>
-              <Route exact path="/dashboard/admin">
-                <Admin />
-              </Route>
-              <Route exact path="/dashboard/support">
-                <Support />
-              </Route>
+              <Switch>
+                <Route exact path="/" component={Dashboard} />
+                <Route exact path="/orders" component={Orders} />
+                <Route exact path="/account" component={Account} />
+                <Route exact path="/admin" component={Admin} />
+                <Route exact path="/support" component={Support} />
+                <Redirect to="/404" />
+              </Switch>
             </Suspense>
           </DashboardWrapper>
-        </Route>
-        <Route path="/">
-          <Wrapper>
-            <Route exact path="/">
-              <Home />
-            </Route>
-            <Route exact path="/login">
-              <Login />
-            </Route>
-            <Route exact path="/register">
-              <Register />
-            </Route>
-          </Wrapper>
         </Route>
       </Switch>
     </ThemeProvider>

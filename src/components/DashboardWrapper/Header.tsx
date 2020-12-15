@@ -114,7 +114,7 @@ const Header: FunctionComponent<RouteComponentProps> = ({ history }) => {
     } finally {
       setLoading(false);
       setToast(LOGIN, "Successfully logged out");
-      history.push("/login");
+      history.push("/home/login");
     }
   };
 
