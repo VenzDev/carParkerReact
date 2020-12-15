@@ -18,9 +18,17 @@ const Wrapper = styled.div`
   background-color: white;
   display: flex;
 
+  @media (max-width: 750px) {
+      width:100%;
+  }
+
   > div:first-child {
     flex: 0 0 75%;
     border-right: 1px solid lightgray;
+
+    @media (max-width: 750px) {
+      flex: 0 0 60%;
+    }
   }
 
   > div:last-child {
@@ -30,10 +38,15 @@ const Wrapper = styled.div`
     align-items: center;
     justify-content: center;
 
+    @media (max-width: 750px) {
+      flex: 0 0 40%;
+    }
+
     > i {
       font-size: 2rem;
     }
   }
+  
 `;
 
 const SpinnerWrapper = styled.div`
@@ -50,6 +63,15 @@ const SendMessageWrapper = styled.div`
   margin: 1rem auto;
   padding: 1rem;
   background-color: white;
+
+  @media (max-width: 1000px) {
+    width:80%;
+  }
+
+  @media (max-width: 750px) {
+    width:100%;
+    margin:0 auto;
+  }
 `;
 
 const TextareaWrapper = styled.div`
@@ -58,6 +80,9 @@ const TextareaWrapper = styled.div`
   > textarea {
     height: 70px;
     width: 100%;
+  }
+  @media (max-width: 500px) {
+      width:90%;
   }
 `;
 
@@ -115,29 +140,29 @@ const Tickets: FunctionComponent = () => {
           <Spinner />
         </SpinnerWrapper>
       ) : (
-        <>
-          {ticket && <Title>{ticket.title}</Title>}
-          {ticket &&
-            ticket.messages.map((message, id) => (
-              <Wrapper key={id}>
-                <div>{message.content}</div>
-                <div>
-                  <i className="far fa-user"/>
-                  <p>{message.user.role === "USER" ? user.name : "Admin"}</p>
-                </div>
-              </Wrapper>
-            ))}
-          <SendMessageWrapper>
-            <p>Send message</p>
-            <TextareaWrapper>
-              <textarea value={message} onChange={handleMessage} placeholder="Your message" />
-            </TextareaWrapper>
-            <CenterGradientButton onClick={handleClick}>
-              {!isLoading ? "Send message" : <Spinner small white />}
-            </CenterGradientButton>
-          </SendMessageWrapper>
-        </>
-      )}
+          <>
+            {ticket && <Title>{ticket.title}</Title>}
+            {ticket &&
+              ticket.messages.map((message, id) => (
+                <Wrapper key={id}>
+                  <div>{message.content}</div>
+                  <div>
+                    <i className="far fa-user" />
+                    <p>{message.user.role === "USER" ? user.name : "Admin"}</p>
+                  </div>
+                </Wrapper>
+              ))}
+            <SendMessageWrapper>
+              <p>Send message</p>
+              <TextareaWrapper>
+                <textarea value={message} onChange={handleMessage} placeholder="Your message" />
+              </TextareaWrapper>
+              <CenterGradientButton onClick={handleClick}>
+                {!isLoading ? "Send message" : <Spinner small white />}
+              </CenterGradientButton>
+            </SendMessageWrapper>
+          </>
+        )}
     </div>
   );
 };

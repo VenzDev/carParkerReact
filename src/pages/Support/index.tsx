@@ -8,6 +8,10 @@ import { selectUser } from "../../features/User/slice";
 
 const Wrapper = styled.div`
   padding: 3rem;
+
+  @media (max-width: 500px) {
+      padding:1rem;
+  }
 `;
 
 const SelectMode = styled.div`
@@ -19,6 +23,8 @@ const SelectMode = styled.div`
   display: flex;
   justify-content: center;
   margin-bottom: 1rem;
+
+
 
   > span:first-child {
     margin-right: 1rem;
@@ -49,7 +55,7 @@ const Support: FunctionComponent = () => {
           {user.has_ticket && <span onClick={() => SetMode("TICKETS")}>Your Ticket</span>}
         </SelectMode>
       )}
-      {mode === "NEW" && <NewTicket refreshPage={()=> SetMode("TICKETS")} />}
+      {mode === "NEW" && <NewTicket refreshPage={() => SetMode("TICKETS")} />}
       {mode === "TICKETS" && <Tickets />}
       {mode === "ADMIN" && <AdminTickets />}
     </Wrapper>
