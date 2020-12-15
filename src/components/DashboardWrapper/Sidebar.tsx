@@ -63,7 +63,7 @@ const NavItem = styled.div`
   border-top-left-radius: 23px;
   position: relative;
   margin: 1rem;
-  margin-left: 30%;
+  margin-left: 25%;
   margin-right: 0;
   padding: 1rem;
   font-size: 1.3rem;
@@ -133,7 +133,7 @@ const Sidebar: FunctionComponent = () => {
                   <ReservationCount>{getReservationsCount()}</ReservationCount>
                 )}
               </i>
-              <span>Orders</span>
+              <span>Reservations</span>
             </NavItem>
           </StyledNavLinkSidebar>
           <StyledNavLinkSidebar exact to="/dashboard/account">

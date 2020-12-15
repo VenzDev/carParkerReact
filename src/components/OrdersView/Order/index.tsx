@@ -16,6 +16,17 @@ const Wrapper = styled.div`
   background-color: white;
   display: flex;
   align-items: center;
+  
+  @media (max-width: 900px) {
+    flex-direction:column;
+    height:auto;
+  }
+
+    
+  @media (max-width: 600px) {
+    width:100%;
+  }
+  
 `;
 
 const OrderInfo = styled.div`
@@ -27,12 +38,19 @@ const OrderTime = styled.div`
   flex: 0 0 30%;
   font-size: 5rem;
   display: flex;
+  flex-direction:column;
   align-items: center;
   justify-content: center;
   color: ${({ theme }) => theme.color.blueDark};
+
+  > span {
+    font-size:1.3rem;
+    margin-bottom:0.5rem;
+  }
 `;
 
 const OrderStatusWrapper = styled.div`
+  margin:0 1rem;
   flex: 0 0 20%;
 `;
 
@@ -77,6 +95,11 @@ const Order: FunctionComponent<IOrder> = ({ reservation, reload }) => {
     return status;
   };
 
+  const prepareFormat = () => {
+    if (to_open > 24 * 60 * 60) return 'Days hh:mm:ss';
+    else return 'hh:mm:ss';
+  }
+
   const {
     id,
     parking_slot_id,
@@ -119,6 +142,7 @@ const Order: FunctionComponent<IOrder> = ({ reservation, reload }) => {
         <p>{to_open ? "You can put your RFID card on scanner in" : "Your reservation is still active for"}</p>
       </OrderStatusWrapper>
       <OrderTime>
+        <span>{prepareFormat()}</span>
         <Timer time={to_open || to_close || to_system_close} />
       </OrderTime>
     </Wrapper>

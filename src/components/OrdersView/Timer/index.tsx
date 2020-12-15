@@ -11,6 +11,10 @@ const Time = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 900px) {
+    margin-bottom:1rem;
+  }
 `;
 
 interface IProps {

@@ -12,6 +12,10 @@ const OrdersContainer = styled.div`
 
 const Wrapper = styled.div`
   padding: 3rem;
+
+  @media (max-width: 600px) {
+    padding:2rem;
+  }
 `;
 
 const H2 = styled.h2`
@@ -38,13 +42,13 @@ const Orders: FunctionComponent = () => {
       {isLoading ? (
         <Spinner />
       ) : (
-        <Wrapper>
-          <H2>Your active reservations</H2>
-          {reservations.map((reservation) => (
-            <Order reload={getReservations} key={reservation.id} reservation={reservation} />
-          ))}
-        </Wrapper>
-      )}
+          <Wrapper>
+            <H2>Your active reservations</H2>
+            {reservations.map((reservation) => (
+              <Order reload={getReservations} key={reservation.id} reservation={reservation} />
+            ))}
+          </Wrapper>
+        )}
     </OrdersContainer>
   );
 };
