@@ -55,7 +55,7 @@ export interface AvailableReservationsData {
 
 export interface CreateTicket {
   title: string;
-  message: string;
+  content: string;
 }
 
 export interface Message {

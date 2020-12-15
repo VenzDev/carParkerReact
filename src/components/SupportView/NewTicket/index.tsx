@@ -2,6 +2,7 @@ import React, { ChangeEvent, FunctionComponent, useState } from "react";
 import styled from "styled-components";
 import { createTicket } from "../../../api/Api";
 import { GradientButton } from "../../Button";
+import Spinner from "../../Reusable/Spinner";
 
 const SendTicket = styled.div`
   padding: 1rem;
@@ -17,9 +18,11 @@ const SendTicket = styled.div`
 
   > div {
     width: 90%;
-    margin: 0 auto;
+    margin: 1rem auto;
 
     > textarea {
+      padding:1rem;
+      text-indent:1rem;
       width: 100%;
       min-height: 300px;
     }
@@ -30,21 +33,31 @@ const Select = styled.select`
   margin: 1rem;
 `;
 
-const NewTicket: FunctionComponent = () => {
+const GradientButtonRelative = styled(GradientButton)`
+  position:relative;
+  height:50px;
+`
+
+interface IProps {
+  refreshPage: () => void;
+}
+
+const NewTicket: FunctionComponent<IProps> = ({ refreshPage }) => {
   const [title, setTitle] = useState("Problem with car");
-  const [message, setMessage] = useState("");
+  const [content, setContent] = useState("");
+  const [isLoading, setLoading] = useState(false);
 
   const handleTitle = (e: ChangeEvent<HTMLSelectElement>) => {
     setTitle(e.currentTarget.value);
   };
 
   const handleMessage = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage(e.currentTarget.value);
+    setContent(e.currentTarget.value);
   };
 
   const handleSubmit = () => {
-    createTicket({ title, message }).then(() => {
-      console.log("success");
+    createTicket({ title, content }).then(() => {
+      refreshPage();
     });
   };
 
@@ -57,9 +70,11 @@ const NewTicket: FunctionComponent = () => {
         <option value="Other">Other</option>
       </Select>
       <div>
-        <textarea onChange={handleMessage} value={message} placeholder="your message" />
+        <textarea onChange={handleMessage} value={content} placeholder="your message" />
       </div>
-      <GradientButton onClick={handleSubmit}>Send ticket</GradientButton>
+      <GradientButtonRelative style={{ position: "relative" }} onClick={() => { setLoading(true); handleSubmit(); }}>
+        {!isLoading ? "Send message" : <Spinner small white />}
+      </GradientButtonRelative>
     </SendTicket>
   );
 };

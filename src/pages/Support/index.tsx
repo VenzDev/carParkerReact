@@ -49,7 +49,7 @@ const Support: FunctionComponent = () => {
           {user.has_ticket && <span onClick={() => SetMode("TICKETS")}>Your Ticket</span>}
         </SelectMode>
       )}
-      {mode === "NEW" && <NewTicket />}
+      {mode === "NEW" && <NewTicket refreshPage={()=> SetMode("TICKETS")} />}
       {mode === "TICKETS" && <Tickets />}
       {mode === "ADMIN" && <AdminTickets />}
     </Wrapper>
