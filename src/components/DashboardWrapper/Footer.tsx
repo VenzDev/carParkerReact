@@ -49,7 +49,6 @@ const Footer: FunctionComponent = () => {
         <Active />
         <i className="fas fa-home"></i>
       </Icon>
-
       <Icon exact to="/orders">
         <Active />
         <i className="fas fa-shopping-cart"></i>

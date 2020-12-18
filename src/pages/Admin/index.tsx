@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
 
 import styled from "styled-components";
+import CarsOnParking from "../../components/AdminView/CarsOnParking";
 import Stats from "../../components/AdminView/Stats";
 
 const Wrapper = styled.div`
@@ -12,34 +13,44 @@ const SelectMode = styled.div`
   box-shadow: 2px 6px 12px rgba(0, 0, 0, 0.05);
   background-color: white;
   padding: 1rem;
-  width: 200px;
+  width: 400px;
   display: flex;
   justify-content: center;
   margin-bottom: 1rem;
-
-  > span:first-child {
-    margin-right: 1rem;
-  }
-  > span {
-    cursor: pointer;
-    transition: 0.2s;
-
-    &:hover {
-      color: blue;
-    }
-  }
 `;
+
+interface ISpan {
+  active: boolean
+}
+
+const Span = styled.span`
+  margin-right: 1rem;
+  color:${({ active }: ISpan) => (active && 'blue')};
+  &:last-child {
+    margin-right:0;
+  }
+  cursor: pointer;
+  transition: 0.2s;
+
+  &:hover {
+      color: blue;
+  }
+`
 
 const Admin: FunctionComponent = () => {
   const [mode, SetMode] = useState("STATS");
   return (
     <Wrapper>
       <SelectMode>
-        <span onClick={() => SetMode("RESERVATIONS")}>Reservations</span>
-        <span onClick={() => SetMode("STATS")}>Stats</span>
+        <Span active={mode === 'RESERVATIONS'} onClick={() => SetMode("RESERVATIONS")}>Reservations</Span>
+        <Span active={mode === 'USERS'} onClick={() => SetMode("USERS")}>Users</Span>
+        <Span active={mode === 'STATS'} onClick={() => SetMode("STATS")}>Stats</Span>
+        <Span active={mode === 'CARS_ON_PARKING'} onClick={() => SetMode("CARS_ON_PARKING")}>Cars on parking</Span>
       </SelectMode>
       {mode === "STATS" && <Stats />}
       {mode === "RESERVATIONS" && <div>reservations</div>}
+      {mode === "USERS" && <div>users</div>}
+      {mode === 'CARS_ON_PARKING' && <CarsOnParking />}
     </Wrapper>
   );
 };

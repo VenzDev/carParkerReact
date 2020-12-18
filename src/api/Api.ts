@@ -117,4 +117,10 @@ export const setTicketAsFinished = async (ticket_id: number) => {
   await Api.post("/setTicketAsFinished", { ticket_id });
 };
 
+export const adminCarsOnParking = async () => {
+  await Api.get('/csrf-cookie');
+  const fetchedData = await Api.get('/adminCarsOnParking');
+  return fetchedData.data;
+}
+
 export default Api;
