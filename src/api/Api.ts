@@ -123,4 +123,10 @@ export const adminCarsOnParking = async () => {
   return fetchedData.data;
 }
 
+export const getAllReservations = async () => {
+  await Api.get('/csrf-cookie');
+  const fetchedData = await Api.get('/allActiveReservations');
+  return fetchedData.data;
+}
+
 export default Api;

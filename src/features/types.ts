@@ -77,3 +77,18 @@ export interface AddTicketProps {
   ticket_id: number;
   content: string;
 }
+
+interface AdminReservation extends Reservation {
+  user: {
+    id: number;
+    name: string;
+  };
+}
+
+export interface AdminReservations {
+  current_page: number;
+  per_page: number;
+  from: number;
+  to: number;
+  data: Array<AdminReservation>;
+}
