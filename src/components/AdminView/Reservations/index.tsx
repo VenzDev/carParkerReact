@@ -1,18 +1,24 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
-import { getAllReservations } from "../../../api/Api";
+import { deleleReservation, getAllReservations } from "../../../api/Api";
 import { AdminReservations } from "../../../features/types";
 import { Reservation } from "./styles";
 
 const Reservations: FunctionComponent = () => {
   const [data, setData] = useState<AdminReservations | null>(null);
 
+  const getData = async () => {
+    const data = await getAllReservations();
+    setData(data);
+  };
+
   useEffect(() => {
-    const getData = async () => {
-      const data = await getAllReservations();
-      setData(data);
-    };
     getData();
   }, []);
+
+  const handleDelete = async (id: number) => {
+    await deleleReservation(id);
+    getData();
+  };
 
   return (
     <div>
@@ -33,7 +39,10 @@ const Reservations: FunctionComponent = () => {
             </div>
             <div>
               <i className="fas fa-edit"></i>
-              <i className="fas fa-trash"></i>
+              <i
+                onClick={() => handleDelete(parseInt(reservation.id))}
+                className="fas fa-trash"
+              ></i>
             </div>
           </Reservation>
         ))}

@@ -18,7 +18,11 @@ Api.defaults.withCredentials = true;
 Api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (!error || (error.response && error.response.status === 500) || !error.response) {
+    if (
+      !error ||
+      (error.response && error.response.status === 500) ||
+      !error.response
+    ) {
       return Promise.reject(Error("Something went wrong. Try again later."));
     }
     return Promise.reject(error);
@@ -61,7 +65,9 @@ export const getActiveReservations = async () => {
   return fetchedData.data;
 };
 
-export const getAvailableReservations = async (data: AvailableReservationsData) => {
+export const getAvailableReservations = async (
+  data: AvailableReservationsData
+) => {
   await Api.get("/csrf-cookie");
   const fetchedData = await Api.post("/availableReservations", data);
   return fetchedData.data;
@@ -118,15 +124,20 @@ export const setTicketAsFinished = async (ticket_id: number) => {
 };
 
 export const adminCarsOnParking = async () => {
-  await Api.get('/csrf-cookie');
-  const fetchedData = await Api.get('/adminCarsOnParking');
+  await Api.get("/csrf-cookie");
+  const fetchedData = await Api.get("/adminCarsOnParking");
   return fetchedData.data;
-}
+};
 
 export const getAllReservations = async () => {
-  await Api.get('/csrf-cookie');
-  const fetchedData = await Api.get('/allActiveReservations');
+  await Api.get("/csrf-cookie");
+  const fetchedData = await Api.get("/allActiveReservations");
   return fetchedData.data;
-}
+};
+
+export const deleleReservation = async (reservation_id: number) => {
+  await Api.get("/csrf-cookie");
+  await Api.post("/deleteReservation", { reservation_id });
+};
 
 export default Api;
