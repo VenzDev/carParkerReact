@@ -1,6 +1,6 @@
 import { Switch } from "@material-ui/core";
 import React, { FormEvent, FunctionComponent, useState } from "react";
-import styled from "styled-components";
+import { styled } from "../../../styles/theme";
 import { editUser } from "../../../api/Api";
 import { AdminUser } from "../../../features/types";
 import { GradientButton } from "../../Button";
