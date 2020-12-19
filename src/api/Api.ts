@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   AddTicketProps,
+  AdminUser,
   AvailableReservationsData,
   CheckDates,
   CreateTicket,
@@ -138,6 +139,22 @@ export const getAllReservations = async () => {
 export const deleleReservation = async (reservation_id: number) => {
   await Api.get("/csrf-cookie");
   await Api.post("/deleteReservation", { reservation_id });
+};
+
+export const getAllUsers = async () => {
+  await Api.get("/csrf-cookie");
+  const fetchedData = await Api.get("/allUsers");
+  return fetchedData.data;
+};
+
+export const deleteUser = async (user_id: number) => {
+  await Api.get("/csrf-cookie");
+  await Api.post("/deleteUser", { user_id });
+};
+
+export const editUser = async (user: AdminUser) => {
+  await Api.get("/csrf-cookie");
+  await Api.post("/editUser", user);
 };
 
 export default Api;

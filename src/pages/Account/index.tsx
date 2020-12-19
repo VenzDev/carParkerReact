@@ -62,11 +62,14 @@ const Account: FunctionComponent = () => {
         </UserName>
         <Span>Active reservations: {user.active_reservations}</Span>
         <ActiveAccount>
-          {user.isActive ? (
+          {user.is_active ? (
             <Active>Account active, feel free to use the application</Active>
           ) : (
             <>
-              <Warning>Account not active, probably your RFID card has not been activated.</Warning>
+              <Warning>
+                Account not active, probably your RFID card has not been
+                activated.
+              </Warning>
               <GradientButton>Verify Account</GradientButton>
             </>
           )}

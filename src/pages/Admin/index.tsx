@@ -4,6 +4,7 @@ import styled from "styled-components";
 import CarsOnParking from "../../components/AdminView/CarsOnParking";
 import Reservations from "../../components/AdminView/Reservations";
 import Stats from "../../components/AdminView/Stats";
+import Users from "../../components/AdminView/Users";
 
 const Wrapper = styled.div`
   padding: 3rem;
@@ -66,7 +67,7 @@ const Admin: FunctionComponent = () => {
       </SelectMode>
       {mode === "STATS" && <Stats />}
       {mode === "RESERVATIONS" && <Reservations />}
-      {mode === "USERS" && <div>users</div>}
+      {mode === "USERS" && <Users>users</Users>}
       {mode === "CARS_ON_PARKING" && <CarsOnParking />}
     </Wrapper>
   );

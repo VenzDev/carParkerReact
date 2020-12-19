@@ -14,7 +14,7 @@ export interface User {
   user_id: number | null;
   name: string | null;
   active_reservations: number | null;
-  isActive: boolean;
+  is_active: boolean;
   cars_on_parking: number | null;
   role: string | null;
   has_ticket: boolean;
@@ -91,4 +91,10 @@ export interface AdminReservations {
   from: number;
   to: number;
   data: Array<AdminReservation>;
+}
+
+export interface AdminUser extends User {
+  id: number;
+  email: string;
+  rfid_card_id: string;
 }
