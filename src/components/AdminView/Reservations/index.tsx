@@ -29,7 +29,6 @@ const Reservations: FunctionComponent = () => {
     if (!data) return [];
     let _reservations = data.data;
     const search = filters.search;
-    console.log(selectFilter);
 
     if (selectFilter === "reserved")
       _reservations = data.data!.filter(

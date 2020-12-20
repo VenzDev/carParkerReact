@@ -31,6 +31,9 @@ export const slice = createSlice({
     logout: (state, action) => {
       state.name = null;
     },
+    setTicket: (state, action) => {
+      state.has_ticket = action.payload.has_ticket;
+    },
   },
 });
 
@@ -39,7 +42,7 @@ const reducer = combineReducers({
   status: status.reducer,
 });
 
-export const { login, logout } = slice.actions;
+export const { login, logout, setTicket } = slice.actions;
 
 export const getUserState = (state: RootState) => state.user;
 export const selectUser = createSelector(getUserState, (state) => state.data);
