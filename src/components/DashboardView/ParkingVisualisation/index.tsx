@@ -4,14 +4,27 @@ import { selectReservations } from "../../../features/Reservations/slice";
 import Spinner from "../../Reusable/Spinner";
 import { Backdrop, Fade, Modal } from "@material-ui/core";
 import ModalContent from "../ModalContent";
-import { ParkingWrapper, Exchange, Slot, Slots, SlotSpace, SlotHorizontal, SlotsHalf } from "./styles";
+import {
+  ParkingWrapper,
+  Exchange,
+  Slot,
+  Slots,
+  SlotSpace,
+  SlotHorizontal,
+  SlotsHalf,
+  Overflow,
+} from "./styles";
 import ModalOrangeContent from "../ModalOrangeContent";
+import { selectUser } from "../../../features/User/slice";
 
 const ParkingVisualisation: FunctionComponent = () => {
   const { reservations, loading } = useSelector(selectReservations);
   const [isModalOpen, setModalOpen] = useState(false);
   const [isOrangeModalOpen, setOrangeModal] = useState(false);
-  const [selectedParkingSlot, setSelectedParkingSlot] = useState<number | null>(null);
+  const [selectedParkingSlot, setSelectedParkingSlot] = useState<number | null>(
+    null
+  );
+  const user = useSelector(selectUser);
 
   const getStatus = (slot_id: number) => {
     if (reservations) return reservations[slot_id];
@@ -33,6 +46,7 @@ const ParkingVisualisation: FunctionComponent = () => {
         </div>
       ) : (
         <>
+          {!user.is_active && <Overflow />}
           <Modal
             BackdropComponent={Backdrop}
             BackdropProps={{
@@ -43,7 +57,10 @@ const ParkingVisualisation: FunctionComponent = () => {
             onClose={() => setModalOpen(false)}
           >
             <Fade in={isModalOpen}>
-              <ModalContent closeModal={() => setModalOpen(false)} parkingId={selectedParkingSlot} />
+              <ModalContent
+                closeModal={() => setModalOpen(false)}
+                parkingId={selectedParkingSlot}
+              />
             </Fade>
           </Modal>
 
@@ -57,7 +74,10 @@ const ParkingVisualisation: FunctionComponent = () => {
             onClose={() => setOrangeModal(false)}
           >
             <Fade in={isOrangeModalOpen}>
-              <ModalOrangeContent closeModal={() => setOrangeModal(false)} parkingId={selectedParkingSlot} />
+              <ModalOrangeContent
+                closeModal={() => setOrangeModal(false)}
+                parkingId={selectedParkingSlot}
+              />
             </Fade>
           </Modal>
           <Exchange>
@@ -92,33 +112,54 @@ const ParkingVisualisation: FunctionComponent = () => {
           <SlotSpace />
           <Slots>
             <SlotsHalf>
-              <SlotHorizontal status={getStatus(8)} onClick={() => handleModal(9)}>
+              <SlotHorizontal
+                status={getStatus(8)}
+                onClick={() => handleModal(9)}
+              >
                 9
               </SlotHorizontal>
-              <SlotHorizontal status={getStatus(9)} onClick={() => handleModal(10)}>
+              <SlotHorizontal
+                status={getStatus(9)}
+                onClick={() => handleModal(10)}
+              >
                 10
               </SlotHorizontal>
             </SlotsHalf>
             <SlotsHalf>
-              <SlotHorizontal status={getStatus(10)} onClick={() => handleModal(11)}>
+              <SlotHorizontal
+                status={getStatus(10)}
+                onClick={() => handleModal(11)}
+              >
                 11
               </SlotHorizontal>
             </SlotsHalf>
           </Slots>
           <Slots>
             <SlotsHalf>
-              <SlotHorizontal status={getStatus(11)} onClick={() => handleModal(12)}>
+              <SlotHorizontal
+                status={getStatus(11)}
+                onClick={() => handleModal(12)}
+              >
                 12
               </SlotHorizontal>
-              <SlotHorizontal status={getStatus(12)} onClick={() => handleModal(13)}>
+              <SlotHorizontal
+                status={getStatus(12)}
+                onClick={() => handleModal(13)}
+              >
                 13
               </SlotHorizontal>
             </SlotsHalf>
             <SlotsHalf>
-              <SlotHorizontal status={getStatus(13)} onClick={() => handleModal(14)}>
+              <SlotHorizontal
+                status={getStatus(13)}
+                onClick={() => handleModal(14)}
+              >
                 14
               </SlotHorizontal>
-              <SlotHorizontal status={getStatus(14)} onClick={() => handleModal(15)}>
+              <SlotHorizontal
+                status={getStatus(14)}
+                onClick={() => handleModal(15)}
+              >
                 15
               </SlotHorizontal>
             </SlotsHalf>

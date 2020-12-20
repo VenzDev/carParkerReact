@@ -1,8 +1,14 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
 import { H2, TimerDiv, Order } from "./styles";
 import DateFnsUtils from "@date-io/date-fns";
-import { TimePicker, DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
+import {
+  TimePicker,
+  DatePicker,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
 import "date-fns";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../features/User/slice";
 
 //Set date without minutes
 const dateWithoutMinutes = (): Date => {
@@ -27,13 +33,23 @@ const DateSelectors: FunctionComponent<IProps> = ({ getDate }) => {
   const [startHour, setStartHour] = useState<Date | null>(dateWithoutMinutes());
   const [endHour, setEndHour] = useState<Date | null>(dateWithCustomMinutes());
   const [isError, setError] = useState(false);
+  const user = useSelector(selectUser);
 
   useEffect(() => {
     const today = new Date();
     //check when today date is selected and selected start time must be greater than today time!
-    if (startHour && date && date.getDate() === today.getDate() && startHour.getHours() <= today.getHours()) {
+    if (
+      startHour &&
+      date &&
+      date.getDate() === today.getDate() &&
+      startHour.getHours() <= today.getHours()
+    ) {
       setError(true);
-    } else if (startHour && endHour && startHour?.getHours() > endHour?.getHours()) {
+    } else if (
+      startHour &&
+      endHour &&
+      startHour?.getHours() > endHour?.getHours()
+    ) {
       setError(true);
     } else {
       setError(false);
@@ -67,6 +83,7 @@ const DateSelectors: FunctionComponent<IProps> = ({ getDate }) => {
               label="Select date"
               format="MM/dd/yyyy"
               value={date}
+              disabled={!user.is_active}
               onChange={handleDateChange}
             />
           </Order>
@@ -78,6 +95,7 @@ const DateSelectors: FunctionComponent<IProps> = ({ getDate }) => {
             onChange={handleStartHour}
             ampm={false}
             minutesStep={10}
+            disabled={!user.is_active}
             error={isError}
             helperText={isError && "Invalid hours"}
           />
@@ -89,6 +107,7 @@ const DateSelectors: FunctionComponent<IProps> = ({ getDate }) => {
             onChange={handleEndHour}
             ampm={false}
             minutesStep={10}
+            disabled={!user.is_active}
             error={isError}
             helperText={isError && "Invalid hours"}
             cancelLabel="Anuluj"

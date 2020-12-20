@@ -1,5 +1,14 @@
 import styled from "styled-components";
 
+export const Overflow = styled.div`
+  height: 1200px;
+  width: 100%;
+  opacity: 0.5;
+  background-color: white;
+  position: absolute;
+  z-index: 1000;
+`;
+
 export const ParkingWrapper = styled.div`
   width: 800px;
   margin: 0 auto;
@@ -8,6 +17,7 @@ export const ParkingWrapper = styled.div`
   box-shadow: 2px 6px 12px rgba(0, 0, 0, 0.05);
   border-radius: 16px;
   position: relative;
+  overflow: hidden;
 
   @media (max-width: 1100px) {
     width: 600px;
@@ -67,16 +77,21 @@ export const Slot = styled.div`
 
   box-shadow: ${({ status }: ISlot) => {
     if (status === "FREE") return "2px 6px 12px rgba(30, 255, 0, 0.3)";
-    else if (status === "AVAILABLE_RESERVATION") return "2px 6px 12px rgba(255, 200, 0, 0.3)";
+    else if (status === "AVAILABLE_RESERVATION")
+      return "2px 6px 12px rgba(255, 200, 0, 0.3)";
     else if (status === "BUSY") return "2px 6px 12px rgba(232, 0, 0, 0.3)";
   }};
 
-  cursor: ${({ status }: ISlot) => (status === "FREE" || status === "AVAILABLE_RESERVATION" ? "pointer" : "inherit")};
+  cursor: ${({ status }: ISlot) =>
+    status === "FREE" || status === "AVAILABLE_RESERVATION"
+      ? "pointer"
+      : "inherit"};
 
   &:hover {
     box-shadow: ${({ status }: ISlot) => {
       if (status === "FREE") return "2px 6px 12px rgba(30, 255, 0, 0.9)";
-      else if (status === "AVAILABLE_RESERVATION") return "2px 6px 12px rgba(255, 200, 0, 0.9)";
+      else if (status === "AVAILABLE_RESERVATION")
+        return "2px 6px 12px rgba(255, 200, 0, 0.9)";
     }};
   }
 
@@ -136,11 +151,15 @@ export const SlotHorizontal = styled.div`
 
   box-shadow: ${({ status }: ISlot) => {
     if (status === "FREE") return "2px 6px 12px rgba(30, 255, 0, 0.3)";
-    else if (status === "AVAILABLE_RESERVATION") return "2px 6px 12px rgba(255, 200, 0, 0.3)";
+    else if (status === "AVAILABLE_RESERVATION")
+      return "2px 6px 12px rgba(255, 200, 0, 0.3)";
     else if (status === "BUSY") return "2px 6px 12px rgba(232, 0, 0, 0.3)";
   }};
 
-  cursor: ${({ status }: ISlot) => (status === "FREE" || status === "AVAILABLE_RESERVATION" ? "pointer" : "inherit")};
+  cursor: ${({ status }: ISlot) =>
+    status === "FREE" || status === "AVAILABLE_RESERVATION"
+      ? "pointer"
+      : "inherit"};
 
   &:hover {
     box-shadow: ${({ status }: ISlot) => {

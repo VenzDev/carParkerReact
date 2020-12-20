@@ -1,12 +1,17 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
 import styled from "styled-components";
-import { InfoGeneral, ParkingVisualisation, DateSelectors } from "../../components/DashboardView";
+import {
+  InfoGeneral,
+  ParkingVisualisation,
+  DateSelectors,
+} from "../../components/DashboardView";
 import { Snackbar } from "@material-ui/core";
 import { isToast, DASHBOARD, Toast, IToast } from "../../utils/toast";
 import { checkParking } from "../../api/Api";
 import { useDispatch } from "react-redux";
 import { setReservations, prepare } from "../../features/Reservations/slice";
 import { setTimes } from "../../features/Time/slice";
+import Warning from "../../components/DashboardView/Warning";
 
 const Wrapper = styled.div`
   padding: 2rem;
@@ -22,7 +27,10 @@ const Wrapper = styled.div`
 
 const Dashboard: FunctionComponent = () => {
   const dispatch = useDispatch();
-  const [isLoggedToast, setLoggedToast] = useState<IToast>({ message: null, isToast: false });
+  const [isLoggedToast, setLoggedToast] = useState<IToast>({
+    message: null,
+    isToast: false,
+  });
 
   const getDate = async (date: Date, startHour: Date, endHour: Date) => {
     let from = "";
@@ -80,6 +88,7 @@ const Dashboard: FunctionComponent = () => {
         <Toast>Successfully logged in!</Toast>
       </Snackbar>
       <InfoGeneral />
+      <Warning />
       <DateSelectors getDate={getDate} />
       <ParkingVisualisation />
     </Wrapper>
