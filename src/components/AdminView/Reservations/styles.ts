@@ -1,3 +1,4 @@
+import { FormControl } from "@material-ui/core";
 import styled from "styled-components";
 
 export const Reservation = styled.div`
@@ -50,4 +51,30 @@ export const Reservation = styled.div`
     justify-content: center;
     flex: 0 0 20%;
   }
+`;
+
+export const StyledSelect = styled(FormControl)`
+  width: 200px;
+`;
+
+export const FilterPanel = styled.div`
+  height: 70px;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  box-shadow: 2px 6px 12px rgba(0, 0, 0, 0.05);
+  width: 40%;
+  margin: 1rem auto;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+`;
+
+export const BackButton = styled.button`
+  color: white;
+  background-color: ${({ theme }) => theme.color.blueDark};
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
 `;

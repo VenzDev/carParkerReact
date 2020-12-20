@@ -1,10 +1,20 @@
-import React, { FunctionComponent, useEffect, useState } from "react";
+import { InputLabel, MenuItem, Select, TextField } from "@material-ui/core";
+import React, {
+  ChangeEvent,
+  FormEvent,
+  FunctionComponent,
+  useEffect,
+  useState,
+} from "react";
 import { deleleReservation, getAllReservations } from "../../../api/Api";
 import { AdminReservations } from "../../../features/types";
-import { Reservation } from "./styles";
+import { BackButton } from "../Users/styles";
+import { FilterPanel, Reservation, StyledSelect } from "./styles";
 
 const Reservations: FunctionComponent = () => {
   const [data, setData] = useState<AdminReservations | null>(null);
+  const [selectFilter, setSelectFilter] = useState("all");
+  const [filters, setFilters] = useState({ search: "", options: {} });
 
   const getData = async () => {
     const data = await getAllReservations();
@@ -15,16 +25,66 @@ const Reservations: FunctionComponent = () => {
     getData();
   }, []);
 
+  const filterReservations = () => {
+    if (!data) return [];
+    let _reservations = data.data;
+    const search = filters.search;
+    console.log(selectFilter);
+
+    if (selectFilter === "reserved")
+      _reservations = data.data!.filter(
+        (reservation) => reservation.status === "RESERVED"
+      );
+    else if (selectFilter === "car_on_parking")
+      _reservations = data.data!.filter(
+        (reservation) => reservation.status === "CAR ON PARKING"
+      );
+
+    if (filters.search.length > 0)
+      _reservations = data.data!.filter(
+        (reservation) => reservation.user_id === parseInt(search)
+      );
+
+    return _reservations;
+  };
+
   const handleDelete = async (id: number) => {
     await deleleReservation(id);
     getData();
   };
 
+  const handleSelectFilter = (e: ChangeEvent<any>) => {
+    setSelectFilter(e.target.value);
+  };
+
+  const handleSearch = (
+    e: FormEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFilters({ ...filters, search: e.currentTarget.value });
+  };
+
+  const filteredReservations = filterReservations();
+
   return (
     <div>
+      <FilterPanel>
+        <StyledSelect>
+          <InputLabel>Show only with status</InputLabel>
+          <Select onChange={(e) => handleSelectFilter(e)} value={selectFilter}>
+            <MenuItem value="all">all statuses</MenuItem>
+            <MenuItem value="reserved">reserved</MenuItem>
+            <MenuItem value="car_on_parking">car on parking</MenuItem>
+          </Select>
+        </StyledSelect>
+        <TextField
+          onChange={(e) => handleSearch(e)}
+          label="Filter by user id"
+        />
+        <BackButton>Show Filters</BackButton>
+      </FilterPanel>
       {data &&
-        data.data.length > 0 &&
-        data.data.map((reservation) => (
+        filteredReservations.length > 0 &&
+        filteredReservations.map((reservation) => (
           <Reservation key={reservation.id}>
             <div>
               <p>Reservation id: {reservation.id}</p>
