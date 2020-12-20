@@ -1,8 +1,10 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useState } from "react";
 import { styled } from "../../styles/theme";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../features/User/slice";
 import { GradientButton } from "../../components/Button";
+import { Backdrop, Fade, Modal } from "@material-ui/core";
+import VerifyModal from "./VerifyModal";
 
 const Wrapper = styled.div`
   padding: 3rem;
@@ -51,9 +53,24 @@ const Span = styled.span`
 `;
 
 const Account: FunctionComponent = () => {
+  const [isModalOpen, setModalOpen] = useState(false);
   const user = useSelector(selectUser);
+
   return (
     <Wrapper>
+      <Modal
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+        closeAfterTransition
+        onClose={() => setModalOpen(false)}
+        open={isModalOpen}
+      >
+        <Fade in={isModalOpen}>
+          <VerifyModal closeModal={() => setModalOpen(false)} />
+        </Fade>
+      </Modal>
       <H2>Your account</H2>
       <AccountWrapper>
         <UserName>
@@ -70,7 +87,9 @@ const Account: FunctionComponent = () => {
                 Account not active, probably your RFID card has not been
                 activated.
               </Warning>
-              <GradientButton>Verify Account</GradientButton>
+              <GradientButton onClick={() => setModalOpen(true)}>
+                Verify Account
+              </GradientButton>
             </>
           )}
         </ActiveAccount>

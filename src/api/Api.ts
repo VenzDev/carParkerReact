@@ -157,4 +157,9 @@ export const editUser = async (user: AdminUser) => {
   await Api.post("/editUser", user);
 };
 
+export const verifyAccount = async (code: string) => {
+  await Api.get("/csrf-cookie");
+  await Api.post("/verifyAccount", { code });
+};
+
 export default Api;
