@@ -73,6 +73,9 @@ const NewTicket: FunctionComponent<IProps> = ({ refreshPage }) => {
           Problem with RIFD scanner
         </option>
         <option value="Problem with RFID card">Problem with RFID card</option>
+        <option value="Somebody took my parking slot">
+          Somebody took my parking slot
+        </option>
         <option value="Other">Other</option>
       </Select>
       <div>

@@ -6,7 +6,13 @@ import Spinner from "../../Reusable/Spinner";
 import { reserveSlot, auth, checkParking } from "../../../api/Api";
 import { setReservations } from "../../../features/Reservations/slice";
 import { login } from "../../../features/User/slice";
-import { Content, RelativeGradientButton, SuccessIcon, CloseButton, WarningIcon } from "./styles";
+import {
+  Content,
+  RelativeGradientButton,
+  SuccessIcon,
+  CloseButton,
+  WarningIcon,
+} from "./styles";
 
 interface IModalContent {
   parkingId: number | null;
@@ -17,7 +23,10 @@ const CONFIRM_STATUS = "CONFIRM_STATUS";
 const SUCCESS_STATUS = "SUCCESS_STATUS";
 const FAILED_STATUS = "FAILED_STATUS";
 
-const ModalContent: FunctionComponent<IModalContent> = ({ parkingId, closeModal }) => {
+const ModalContent: FunctionComponent<IModalContent> = ({
+  parkingId,
+  closeModal,
+}) => {
   const [isLoading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [modalState, setModalState] = useState(CONFIRM_STATUS);
@@ -51,12 +60,16 @@ const ModalContent: FunctionComponent<IModalContent> = ({ parkingId, closeModal 
         active_reservations: fetchedUser.data.reservations.length,
         cars_on_parking: fetchedUser.data.cars_on_parking,
         role: fetchedUser.data.role,
+        isActive: fetchedUser.data.is_active,
       })
     );
 
     //refresh parking visualization
     if (times.endTime && times.startTime) {
-      const response = await checkParking({ to: times.endTime, from: times.startTime });
+      const response = await checkParking({
+        to: times.endTime,
+        from: times.startTime,
+      });
       dispatch(setReservations(response.data));
     }
   };
@@ -67,16 +80,16 @@ const ModalContent: FunctionComponent<IModalContent> = ({ parkingId, closeModal 
       </CloseButton>
       {modalState === CONFIRM_STATUS && (
         <>
-          <p>Rezerwacja od: {times.startTime}</p>
-          <p>Rezerwacja do: {times.endTime}</p>
-          <p>Miejsce parkingowe :{parkingId}</p>
+          <p>Reservation from: {times.startTime}</p>
+          <p>Reservation to: {times.endTime}</p>
+          <p>Parking slot number: {parkingId}</p>
           <RelativeGradientButton
             onClick={() => {
               setLoading(true);
               handleSubmit();
             }}
           >
-            {isLoading ? <Spinner small white /> : "Potwierdź rezerwację"}
+            {isLoading ? <Spinner small white /> : "Confirm Reservation"}
           </RelativeGradientButton>
         </>
       )}
@@ -86,7 +99,9 @@ const ModalContent: FunctionComponent<IModalContent> = ({ parkingId, closeModal 
             <i className="fas fa-calendar-check"></i>
           </SuccessIcon>
           <p>Successfully reserved parking slot!</p>
-          <RelativeGradientButton onClick={closeModal}>Close</RelativeGradientButton>
+          <RelativeGradientButton onClick={closeModal}>
+            Close
+          </RelativeGradientButton>
         </>
       )}
       {modalState === FAILED_STATUS && (
@@ -95,7 +110,9 @@ const ModalContent: FunctionComponent<IModalContent> = ({ parkingId, closeModal 
             <i className="far fa-frown-open"></i>
           </WarningIcon>
           <p>{errorMessage}</p>
-          <RelativeGradientButton onClick={closeModal}>Close</RelativeGradientButton>
+          <RelativeGradientButton onClick={closeModal}>
+            Close
+          </RelativeGradientButton>
         </>
       )}
     </Content>

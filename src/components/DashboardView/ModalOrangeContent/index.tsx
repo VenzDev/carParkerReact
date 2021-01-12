@@ -1,12 +1,26 @@
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { auth, checkParking, getAvailableReservations, reserveSlot } from "../../../api/Api";
+import {
+  auth,
+  checkParking,
+  getAvailableReservations,
+  reserveSlot,
+} from "../../../api/Api";
 import { setReservations } from "../../../features/Reservations/slice";
 import { selectTimes } from "../../../features/Time/slice";
 import { login, selectUser } from "../../../features/User/slice";
 import Spinner from "../../Reusable/Spinner";
 import { RelativeGradientButton, SuccessIcon } from "../ModalContent/styles";
-import { Content, CloseButton, LoadingWrapper, P, Span, Button, ReservationContent, FlexDiv } from "./styles";
+import {
+  Content,
+  CloseButton,
+  LoadingWrapper,
+  P,
+  Span,
+  Button,
+  ReservationContent,
+  FlexDiv,
+} from "./styles";
 
 interface IModalContent {
   parkingId: number | null;
@@ -17,12 +31,19 @@ const AVAILABLE = "AVAILABLE";
 const CONFIRM = "CONFIRM";
 const SUCCESS = "SUCCESS";
 
-const ModalOrangeContent: FunctionComponent<IModalContent> = ({ parkingId, closeModal }) => {
+const ModalOrangeContent: FunctionComponent<IModalContent> = ({
+  parkingId,
+  closeModal,
+}) => {
   const [isLoading, setLoading] = useState(true);
   const [isSubmitLoading, setSubmitLoading] = useState(false);
   const [status, setStatus] = useState(AVAILABLE);
-  const [selectedReservation, setSelectedReservation] = useState<Array<string>>([]);
-  const [availableReservations, setAvailableReservations] = useState<Array<Array<string>>>([]);
+  const [selectedReservation, setSelectedReservation] = useState<Array<string>>(
+    []
+  );
+  const [availableReservations, setAvailableReservations] = useState<
+    Array<Array<string>>
+  >([]);
   const times = useSelector(selectTimes);
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
@@ -69,7 +90,10 @@ const ModalOrangeContent: FunctionComponent<IModalContent> = ({ parkingId, close
 
     //refresh parking visualization
     if (times.endTime && times.startTime) {
-      const response = await checkParking({ to: times.endTime, from: times.startTime });
+      const response = await checkParking({
+        to: times.endTime,
+        from: times.startTime,
+      });
       dispatch(setReservations(response.data));
     }
 
@@ -92,8 +116,8 @@ const ModalOrangeContent: FunctionComponent<IModalContent> = ({ parkingId, close
               <P>Available reservations</P>
               {availableReservations.map((timers, id) => (
                 <ReservationContent key={id}>
-                  <Span>{`Od: ${timers[0]}`}</Span>
-                  <Span>{`Do: ${timers[1]}`}</Span>
+                  <Span>{`From: ${timers[0]}`}</Span>
+                  <Span>{`To: ${timers[1]}`}</Span>
                   <Button onClick={() => handleSelect(timers)}>Reserve</Button>
                 </ReservationContent>
               ))}
@@ -110,7 +134,11 @@ const ModalOrangeContent: FunctionComponent<IModalContent> = ({ parkingId, close
                   handleSubmit();
                 }}
               >
-                {isSubmitLoading ? <Spinner small white /> : "Potwierdź rezerwację"}
+                {isSubmitLoading ? (
+                  <Spinner small white />
+                ) : (
+                  "Potwierdź rezerwację"
+                )}
               </RelativeGradientButton>
             </FlexDiv>
           )}
@@ -120,7 +148,9 @@ const ModalOrangeContent: FunctionComponent<IModalContent> = ({ parkingId, close
                 <i className="fas fa-calendar-check"></i>
               </SuccessIcon>
               <p>Successfully reserved parking slot!</p>
-              <RelativeGradientButton onClick={closeModal}>Close</RelativeGradientButton>
+              <RelativeGradientButton onClick={closeModal}>
+                Close
+              </RelativeGradientButton>
             </>
           )}
         </>

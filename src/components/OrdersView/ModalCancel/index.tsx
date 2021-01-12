@@ -51,7 +51,11 @@ interface IModal {
   reload: () => void;
 }
 
-const ModalCancel: FunctionComponent<IModal> = ({ closeModal, reservation_id, reload }) => {
+const ModalCancel: FunctionComponent<IModal> = ({
+  closeModal,
+  reservation_id,
+  reload,
+}) => {
   const [isLoading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const handleCancel = () => {
@@ -64,6 +68,7 @@ const ModalCancel: FunctionComponent<IModal> = ({ closeModal, reservation_id, re
           user_id: user.data.id,
           active_reservations: user.data.reservations.length,
           cars_on_parking: user.data.cars_on_parking,
+          isActive: user.data.is_active,
         })
       );
       closeModal();
@@ -74,7 +79,7 @@ const ModalCancel: FunctionComponent<IModal> = ({ closeModal, reservation_id, re
       <CloseButton onClick={closeModal}>
         <i className="fas fa-times"></i>
       </CloseButton>
-      <p>Confirm cancel reservation {reservation_id}</p>
+      <p>Confirm reservation cancellation</p>
       <SubmitButton
         onClick={() => {
           setLoading(true);

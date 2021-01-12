@@ -25,14 +25,16 @@ const Content = styled.div`
   }
 `;
 
-interface DashboardWrapper extends RouteComponentProps { }
+interface DashboardWrapper extends RouteComponentProps {}
 
-const DashboardWrapper: FunctionComponent<DashboardWrapper> = ({ children, history }) => {
+const DashboardWrapper: FunctionComponent<DashboardWrapper> = ({
+  children,
+  history,
+}) => {
   const [isLoading, setLoading] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
-
     async function authUser() {
       try {
         const user = await auth();
@@ -45,6 +47,7 @@ const DashboardWrapper: FunctionComponent<DashboardWrapper> = ({ children, histo
             isActive: user.data.is_active,
             role: user.data.role,
             has_ticket: user.data.has_ticket,
+            email: user.data.email,
           })
         );
         setLoading(false);
@@ -53,23 +56,22 @@ const DashboardWrapper: FunctionComponent<DashboardWrapper> = ({ children, histo
       }
     }
 
-    if (!document.cookie.includes('XSRF-TOKEN')) {
-      history.push('/home');
-    } else
-      authUser();
+    if (!document.cookie.includes("XSRF-TOKEN")) {
+      history.push("/home");
+    } else authUser();
   }, [dispatch, history]);
   return (
     <Wrapper>
       {isLoading ? (
         <Spinner />
       ) : (
-          <>
-            <Sidebar />
-            <Header />
-            <Content>{children}</Content>
-            <Footer />
-          </>
-        )}
+        <>
+          <Sidebar />
+          <Header />
+          <Content>{children}</Content>
+          <Footer />
+        </>
+      )}
     </Wrapper>
   );
 };

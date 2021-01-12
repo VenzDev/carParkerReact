@@ -50,6 +50,8 @@ const Warning = styled.p`
 
 const Span = styled.span`
   margin-left: 1rem;
+  margin-bottom: 0.5rem;
+  display: block;
 `;
 
 const Account: FunctionComponent = () => {
@@ -78,6 +80,7 @@ const Account: FunctionComponent = () => {
           <p>{user.name}</p>
         </UserName>
         <Span>Active reservations: {user.active_reservations}</Span>
+        <Span>Email: {user.email}</Span>
         <ActiveAccount>
           {user.is_active ? (
             <Active>Account active, feel free to use the application</Active>

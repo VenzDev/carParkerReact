@@ -18,6 +18,7 @@ export interface User {
   cars_on_parking: number | null;
   role: string | null;
   has_ticket: boolean;
+  email: string | null;
 }
 
 export interface Reservation {

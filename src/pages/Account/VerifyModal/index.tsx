@@ -3,7 +3,8 @@ import React, { FormEvent, FunctionComponent, useState } from "react";
 import { useDispatch } from "react-redux";
 import { verifyAccount } from "../../../api/Api";
 import Spinner from "../../../components/Reusable/Spinner";
-import { Content, CloseButton, SubmitButton } from "./styles";
+import { setActiveAccount } from "../../../features/User/slice";
+import { Content, CloseButton, SubmitButton, ErrorMessage } from "./styles";
 
 interface IModal {
   closeModal: () => void;
@@ -24,9 +25,13 @@ const VerifyModal: FunctionComponent<IModal> = ({ closeModal }) => {
   const handleSubmit = () => {
     verifyAccount(code)
       .then(() => {
+        dispatch(setActiveAccount(true));
         closeModal();
       })
-      .catch(() => setError("Invalid code"));
+      .catch(() => {
+        setError("Invalid code");
+        setLoading(false);
+      });
   };
 
   const handleClick = () => {
@@ -41,7 +46,7 @@ const VerifyModal: FunctionComponent<IModal> = ({ closeModal }) => {
         <i className="fas fa-times"></i>
       </CloseButton>
       <TextField onChange={(e) => handleSearch(e)} label="Activation code" />
-      {error.length > 0 && <p>{error}</p>}
+      {error.length > 0 && <ErrorMessage>{error}</ErrorMessage>}
       <SubmitButton onClick={handleClick}>
         {loading ? <Spinner small white /> : "Verify"}
       </SubmitButton>

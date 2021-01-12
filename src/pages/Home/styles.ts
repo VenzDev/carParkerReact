@@ -70,7 +70,7 @@ export const WaveImgDark = styled.img`
 export const SmartParkingImg = styled.img`
   position: relative;
   width: 80%;
-  margin: 0 auto;
+  margin: 1rem auto;
   display: none;
   opacity: 0;
   transition: 0.5s;
@@ -106,6 +106,11 @@ export const FlexDiv = styled.div`
 export const ImgContainer = styled.div`
   flex-basis: 60%;
   position: relative;
+  text-align: center;
+
+  > a {
+    text-decoration: none;
+  }
 `;
 
 export const HomeText = styled.div`

@@ -41,3 +41,7 @@ export const SubmitButton = styled(GradientButton)`
   margin-top: 1rem;
   height: 40px;
 `;
+
+export const ErrorMessage = styled.p`
+  color: red;
+`;

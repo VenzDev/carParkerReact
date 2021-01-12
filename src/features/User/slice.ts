@@ -11,6 +11,7 @@ const initialState: User = {
   cars_on_parking: null,
   role: null,
   has_ticket: false,
+  email: null,
 };
 
 const status = createStatusSlice("userData");
@@ -27,12 +28,16 @@ export const slice = createSlice({
       state.is_active = action.payload.isActive;
       state.role = action.payload.role;
       state.has_ticket = action.payload.has_ticket;
+      state.email = action.payload.email;
     },
     logout: (state, action) => {
       state.name = null;
     },
     setTicket: (state, action) => {
       state.has_ticket = action.payload.has_ticket;
+    },
+    setActiveAccount: (state, action) => {
+      state.is_active = action.payload;
     },
   },
 });
@@ -42,7 +47,7 @@ const reducer = combineReducers({
   status: status.reducer,
 });
 
-export const { login, logout, setTicket } = slice.actions;
+export const { login, logout, setTicket, setActiveAccount } = slice.actions;
 
 export const getUserState = (state: RootState) => state.user;
 export const selectUser = createSelector(getUserState, (state) => state.data);
