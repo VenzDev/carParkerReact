@@ -1,8 +1,17 @@
-import React, { FunctionComponent, FormEvent, useState, useEffect } from "react";
+import React, {
+  FunctionComponent,
+  FormEvent,
+  useState,
+  useEffect,
+} from "react";
 import { useTranslation } from "react-i18next";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { login } from "../../api/Api";
-import { validateEmail, validatePassword, validInputs } from "../../utils/validators/validateLogin";
+import {
+  validateEmail,
+  validatePassword,
+  validInputs,
+} from "../../utils/validators/validateLogin";
 import Spinner from "../../components/Reusable/Spinner";
 import {
   Wrapper,
@@ -17,10 +26,18 @@ import {
   ApiError,
 } from "./styles";
 import { LoginData } from "../../features/types";
-import { setToast, DASHBOARD, LOGIN, isToast, IToast, Toast } from "../../utils/toast";
+import {
+  setToast,
+  DASHBOARD,
+  LOGIN,
+  isToast,
+  IToast,
+  Toast,
+} from "../../utils/toast";
 import { Snackbar } from "@material-ui/core";
+import Axios from "axios";
 
-interface IProps extends RouteComponentProps { }
+interface IProps extends RouteComponentProps {}
 
 interface Error {
   email: string | null;
@@ -33,8 +50,15 @@ const Login: FunctionComponent<IProps> = ({ history }) => {
   const [data, setData] = useState<LoginData>({ email: "", password: "" });
   const [isShakeWhenApiError, setShakeWhenApiError] = useState(false);
   const [isLoading, setLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<Error>({ email: null, password: null, api: null });
-  const [isRegisteredToast, setRegisteredToast] = useState<IToast>({ message: null, isToast: false });
+  const [errorMessage, setErrorMessage] = useState<Error>({
+    email: null,
+    password: null,
+    api: null,
+  });
+  const [isRegisteredToast, setRegisteredToast] = useState<IToast>({
+    message: null,
+    isToast: false,
+  });
 
   useEffect(() => {
     setRegisteredToast(isToast(LOGIN));
@@ -44,9 +68,26 @@ const Login: FunctionComponent<IProps> = ({ history }) => {
     setData({ email: data.email.trim(), password: data.password.trim() });
   };
 
+  const supercall = async () => {
+    setLoading(false);
+    await Axios.get("https://jsonplaceholder.typicode.com/users");
+    setLoading(true);
+    console.log(isLoading);
+  };
+
+  const supercall2 = async () => {
+    console.log(isLoading);
+    setLoading(false);
+    console.log("xd");
+    await Axios.get("https://jsonplaceholder.typicode.com/users");
+    setLoading(true);
+  };
+
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     removeSpacesFromInputs();
+    setLoading(true);
+    setShakeWhenApiError(false);
 
     if (validInputs(data)) {
       try {
@@ -62,22 +103,25 @@ const Login: FunctionComponent<IProps> = ({ history }) => {
       }
     }
 
+    await supercall();
+    await supercall2();
     setLoading(false);
   };
 
   const handleInput = (e: FormEvent<HTMLInputElement>) => {
     const { value, name } = e.currentTarget;
 
-    if (name === "email") setErrorMessage({ ...errorMessage, email: validateEmail(value) });
+    if (name === "email")
+      setErrorMessage({ ...errorMessage, email: validateEmail(value) });
 
-    if (name === "password") setErrorMessage({ ...errorMessage, password: validatePassword(value) });
+    if (name === "password")
+      setErrorMessage({ ...errorMessage, password: validatePassword(value) });
 
     setData({ ...data, [name]: value });
   };
 
   const handleClick = () => {
     setShakeWhenApiError(false);
-    setLoading(true);
   };
 
   return (
@@ -94,10 +138,17 @@ const Login: FunctionComponent<IProps> = ({ history }) => {
         <LoginrDesc>
           <h2>{t("loginPage.login")}</h2>
           <p>
-            {t("loginPage.notHave")} <StyledLinkBlue to="/register">{t("loginPage.register")}</StyledLinkBlue>
+            {t("loginPage.notHave")}{" "}
+            <StyledLinkBlue to="/register">
+              {t("loginPage.register")}
+            </StyledLinkBlue>
           </p>
         </LoginrDesc>
-        <form style={{ position: "relative" }} onSubmit={handleSubmit} action="">
+        <form
+          style={{ position: "relative" }}
+          onSubmit={handleSubmit}
+          action=""
+        >
           <InputWrapper>
             <InputDesc>{t("loginPage.email")}</InputDesc>
             <Input
@@ -108,7 +159,9 @@ const Login: FunctionComponent<IProps> = ({ history }) => {
               name="email"
               disabled={isLoading}
             />
-            {errorMessage.email && <ErrorMessage>{errorMessage.email}</ErrorMessage>}
+            {errorMessage.email && (
+              <ErrorMessage>{errorMessage.email}</ErrorMessage>
+            )}
           </InputWrapper>
           <InputWrapper>
             <InputDesc>{t("loginPage.password")}</InputDesc>
@@ -120,12 +173,14 @@ const Login: FunctionComponent<IProps> = ({ history }) => {
               name="password"
               disabled={isLoading}
             />
-            {errorMessage.password && <ErrorMessage>{errorMessage.password}</ErrorMessage>}
+            {errorMessage.password && (
+              <ErrorMessage>{errorMessage.password}</ErrorMessage>
+            )}
           </InputWrapper>
           {errorMessage.api && <ApiError>{errorMessage.api}</ApiError>}
           <div>
             <GradientButtonCenter
-              disable={isLoading}
+              disabled={isLoading}
               onClick={handleClick}
               transition={{ duration: 0.3 }}
               variants={{ shake: { x: [-100, 0, 100, 0, -100, 0, 100, 0] } }}

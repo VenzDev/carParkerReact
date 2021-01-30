@@ -6,7 +6,14 @@ export const Wrapper = styled.div`
   width: 100%;
   height: 100%;
   background: #00d3ff;
-  background-image: linear-gradient(to bottom, #0080ff, #0098ff, #00aeff, #00c1ff, #00d3ff);
+  background-image: linear-gradient(
+    to bottom,
+    #0080ff,
+    #0098ff,
+    #00aeff,
+    #00c1ff,
+    #00d3ff
+  );
 `;
 
 export const LoginContent = styled.div`
@@ -75,7 +82,7 @@ export const StyledLinkBlue = styled(StyledLink)`
 `;
 
 interface Test {
-  disable: boolean;
+  disabled: boolean;
 }
 
 export const InputWrapper = styled.div`
@@ -87,9 +94,9 @@ export const GradientButtonCenter = styled(GradientButton)`
   margin: 3rem auto;
   height: 40px;
   display: block;
-  pointer-events: ${({ disable }: Test) => (disable ? "none" : "auto")};
+  pointer-events: ${({ disabled }: Test) => (disabled ? "none" : "auto")};
   position: relative;
-  opacity: ${({ disable }: Test) => (disable ? "0.8" : "1")};
+  opacity: ${({ disabled }: Test) => (disabled ? "0.8" : "1")};
 `;
 
 export const ApiError = styled.p`
