@@ -1,3 +1,6 @@
+[![Build Status](https://www.travis-ci.com/VenzDev/carParkerReact.svg?branch=master)](https://www.travis-ci.com/VenzDev/carParkerReact)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/dddc3185-8c5b-49d2-aac9-40af60324b45/deploy-status)](https://app.netlify.com/sites/upbeat-raman-e69056/deploys)
+
 # Parker 
 System for parking slot reservations with Raspberry Pi
 
