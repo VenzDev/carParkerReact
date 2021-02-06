@@ -1,6 +1,13 @@
 import React, { FunctionComponent } from "react";
-import logo from "../../assets/logo.png";
-import { NavbarWrapper, Navbar, LogoImg, LogoText, SideNavbarContainer, LogoNavbarContainer } from "./styles";
+import logo from "../../assets/logo2.svg";
+import {
+  NavbarWrapper,
+  Navbar,
+  LogoImg,
+  LogoText,
+  SideNavbarContainer,
+  LogoNavbarContainer,
+} from "./styles";
 import { StyledNavLink } from "../Reusable/Links";
 import { useTranslation } from "react-i18next";
 
