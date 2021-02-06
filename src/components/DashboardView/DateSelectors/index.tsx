@@ -1,11 +1,7 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
 import { H2, TimerDiv, Order } from "./styles";
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  TimePicker,
-  DatePicker,
-  MuiPickersUtilsProvider,
-} from "@material-ui/pickers";
+import { TimePicker, DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import "date-fns";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../features/User/slice";
@@ -36,7 +32,7 @@ const DateSelectors: FunctionComponent<IProps> = ({ getDate }) => {
   const user = useSelector(selectUser);
 
   useEffect(() => {
-    const today = new Date();
+    //const today = new Date();
     //check when today date is selected and selected start time must be greater than today time!
     /*if (
       startHour &&
