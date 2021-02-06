@@ -19,7 +19,6 @@ const CarsOnParking: FunctionComponent = () => {
     async function getData() {
       const data = await adminCarsOnParking();
       setStatus(data);
-      console.log(data);
       setLoading(false);
     }
     getData();

@@ -2,7 +2,6 @@ import React, {
   FunctionComponent,
   FormEvent,
   useState,
-  useEffect,
 } from "react";
 import { useTranslation } from "react-i18next";
 import { RouteComponentProps, withRouter } from "react-router-dom";
@@ -26,16 +25,7 @@ import {
   ApiError,
 } from "./styles";
 import { LoginData } from "../../features/types";
-import {
-  setToast,
-  DASHBOARD,
-  LOGIN,
-  isToast,
-  IToast,
-  Toast,
-} from "../../utils/toast";
-import { Snackbar } from "@material-ui/core";
-import Axios from "axios";
+import {toast} from "react-toastify";
 
 interface IProps extends RouteComponentProps {}
 
@@ -55,32 +45,9 @@ const Login: FunctionComponent<IProps> = ({ history }) => {
     password: null,
     api: null,
   });
-  const [isRegisteredToast, setRegisteredToast] = useState<IToast>({
-    message: null,
-    isToast: false,
-  });
-
-  useEffect(() => {
-    setRegisteredToast(isToast(LOGIN));
-  }, []);
 
   const removeSpacesFromInputs = () => {
     setData({ email: data.email.trim(), password: data.password.trim() });
-  };
-
-  const supercall = async () => {
-    setLoading(false);
-    await Axios.get("https://jsonplaceholder.typicode.com/users");
-    setLoading(true);
-    console.log(isLoading);
-  };
-
-  const supercall2 = async () => {
-    console.log(isLoading);
-    setLoading(false);
-    console.log("xd");
-    await Axios.get("https://jsonplaceholder.typicode.com/users");
-    setLoading(true);
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -92,7 +59,7 @@ const Login: FunctionComponent<IProps> = ({ history }) => {
     if (validInputs(data)) {
       try {
         await login(data);
-        setToast(DASHBOARD, "Successfully logged in");
+        toast("Successfully logged in", {position:"top-center", type:"info"});
         history.push("/");
         return;
       } catch (e) {
@@ -103,8 +70,6 @@ const Login: FunctionComponent<IProps> = ({ history }) => {
       }
     }
 
-    await supercall();
-    await supercall2();
     setLoading(false);
   };
 
@@ -120,20 +85,8 @@ const Login: FunctionComponent<IProps> = ({ history }) => {
     setData({ ...data, [name]: value });
   };
 
-  const handleClick = () => {
-    setShakeWhenApiError(false);
-  };
-
   return (
     <Wrapper>
-      <Snackbar
-        autoHideDuration={3000}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        onClose={() => setRegisteredToast({ message: null, isToast: false })}
-        open={isRegisteredToast.isToast}
-      >
-        <Toast>{isRegisteredToast.message}</Toast>
-      </Snackbar>
       <LoginContent>
         <LoginrDesc>
           <h2>{t("loginPage.login")}</h2>
@@ -181,7 +134,6 @@ const Login: FunctionComponent<IProps> = ({ history }) => {
           <div>
             <GradientButtonCenter
               disabled={isLoading}
-              onClick={handleClick}
               transition={{ duration: 0.3 }}
               variants={{ shake: { x: [-100, 0, 100, 0, -100, 0, 100, 0] } }}
               animate={isShakeWhenApiError && "shake"}

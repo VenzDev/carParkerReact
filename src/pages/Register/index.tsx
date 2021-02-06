@@ -19,7 +19,7 @@ import { RegisterData } from "../../features/types";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { validInputs } from "../../utils/validators/validateRegister";
 import Spinner from "../../components/Reusable/Spinner";
-import { LOGIN, setToast } from "../../utils/toast";
+import {toast} from "react-toastify";
 
 interface IProps extends RouteComponentProps { }
 
@@ -53,38 +53,32 @@ const Register: FunctionComponent<IProps> = ({ history }) => {
     });
   };
 
-  const redirectToLogin = () => {
-    setToast(LOGIN, "Successfully registered, now you can login");
-    history.push("/home/login");
-  };
-
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     removeSpacesFromInputs();
+    setShakeWhenApiError(false);
+    setLoading(true);
 
     if (validInputs(data)) {
       try {
         await register(data);
-        redirectToLogin();
+        toast("Successfully registered, now you can login", {position:"top-center", type:"info"});
+        history.push("/home/login");
       } catch (e) {
         setShakeWhenApiError(true);
+        setLoading(false);
         if (e.response) {
-          setLoading(false);
           setErrorMessage({ ...errorMessage, api: e.response.data.message });
         } else setErrorMessage({ ...errorMessage, api: e.message });
       }
     }
+
+    setLoading(false)
   };
 
   const handleInput = (e: FormEvent<HTMLInputElement>) => {
     const { value, name } = e.currentTarget;
-
     setData({ ...data, [name]: value });
-  };
-
-  const handleClick = () => {
-    setShakeWhenApiError(false);
-    setLoading(true);
   };
 
   return (
@@ -128,7 +122,6 @@ const Register: FunctionComponent<IProps> = ({ history }) => {
             <div>
               <GradientButtonCenter
                 disable={isLoading}
-                onClick={handleClick}
                 transition={{ duration: 0.3 }}
                 variants={{ shake: { x: [-100, 0, 100, 0, -100, 0, 100, 0] } }}
                 animate={isShakeWhenApiError && "shake"}

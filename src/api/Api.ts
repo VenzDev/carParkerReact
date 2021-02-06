@@ -10,12 +10,9 @@ import {
   ReserveSlot,
 } from "../features/types";
 
-let baseURL = "https://api.carparker.tk/api";
-if (process.env.NODE_ENV !== "production")
-  baseURL = "http://localhost:8000/api";
 
 let Api = axios.create({
-  baseURL,
+  baseURL:process.env.REACT_APP_URL
 });
 
 Api.defaults.withCredentials = true;

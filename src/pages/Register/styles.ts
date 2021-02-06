@@ -41,6 +41,7 @@ export const RegisterContent = styled.div`
 export const RegisterForm = styled.div`
   flex: 0 0 50%;
   padding: 2rem;
+  position:relative;
 
   @media (max-width: 850px) {
     flex: 0 0 100%;

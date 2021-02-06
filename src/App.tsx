@@ -12,6 +12,9 @@ import Register from "./pages/Register";
 import Home from "./pages/Home";
 import Admin from "./pages/Admin";
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const LoadingDiv = styled.div`
   display: flex;
   align-items: center;
@@ -29,6 +32,7 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 function App() {
   return (
     <ThemeProvider theme={theme}>
+      <ToastContainer/>
       <Switch>
         <Route path="/home">
           <Wrapper>
