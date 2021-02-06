@@ -1,16 +1,8 @@
-import React, {
-  FunctionComponent,
-  FormEvent,
-  useState,
-} from "react";
+import React, { FunctionComponent, FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { login } from "../../api/Api";
-import {
-  validateEmail,
-  validatePassword,
-  validInputs,
-} from "../../utils/validators/validateLogin";
+import { validateEmail, validatePassword, validInputs } from "../../utils/validators/validateLogin";
 import Spinner from "../../components/Reusable/Spinner";
 import {
   Wrapper,
@@ -25,7 +17,6 @@ import {
   ApiError,
 } from "./styles";
 import { LoginData } from "../../features/types";
-import {toast} from "react-toastify";
 
 interface IProps extends RouteComponentProps {}
 
@@ -59,7 +50,6 @@ const Login: FunctionComponent<IProps> = ({ history }) => {
     if (validInputs(data)) {
       try {
         await login(data);
-        toast("Successfully logged in", {position:"top-center", type:"info"});
         history.push("/");
         return;
       } catch (e) {
@@ -76,8 +66,7 @@ const Login: FunctionComponent<IProps> = ({ history }) => {
   const handleInput = (e: FormEvent<HTMLInputElement>) => {
     const { value, name } = e.currentTarget;
 
-    if (name === "email")
-      setErrorMessage({ ...errorMessage, email: validateEmail(value) });
+    if (name === "email") setErrorMessage({ ...errorMessage, email: validateEmail(value) });
 
     if (name === "password")
       setErrorMessage({ ...errorMessage, password: validatePassword(value) });
@@ -92,16 +81,10 @@ const Login: FunctionComponent<IProps> = ({ history }) => {
           <h2>{t("loginPage.login")}</h2>
           <p>
             {t("loginPage.notHave")}{" "}
-            <StyledLinkBlue to="/register">
-              {t("loginPage.register")}
-            </StyledLinkBlue>
+            <StyledLinkBlue to="/register">{t("loginPage.register")}</StyledLinkBlue>
           </p>
         </LoginrDesc>
-        <form
-          style={{ position: "relative" }}
-          onSubmit={handleSubmit}
-          action=""
-        >
+        <form style={{ position: "relative" }} onSubmit={handleSubmit} action="">
           <InputWrapper>
             <InputDesc>{t("loginPage.email")}</InputDesc>
             <Input
@@ -112,9 +95,7 @@ const Login: FunctionComponent<IProps> = ({ history }) => {
               name="email"
               disabled={isLoading}
             />
-            {errorMessage.email && (
-              <ErrorMessage>{errorMessage.email}</ErrorMessage>
-            )}
+            {errorMessage.email && <ErrorMessage>{errorMessage.email}</ErrorMessage>}
           </InputWrapper>
           <InputWrapper>
             <InputDesc>{t("loginPage.password")}</InputDesc>
@@ -126,9 +107,7 @@ const Login: FunctionComponent<IProps> = ({ history }) => {
               name="password"
               disabled={isLoading}
             />
-            {errorMessage.password && (
-              <ErrorMessage>{errorMessage.password}</ErrorMessage>
-            )}
+            {errorMessage.password && <ErrorMessage>{errorMessage.password}</ErrorMessage>}
           </InputWrapper>
           {errorMessage.api && <ApiError>{errorMessage.api}</ApiError>}
           <div>

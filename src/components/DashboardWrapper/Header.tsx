@@ -5,10 +5,10 @@ import { motion } from "framer-motion";
 import { logout } from "../../api/Api";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import Spinner from "../Reusable/Spinner";
-import { setToast, LOGIN } from "../../utils/toast";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser, logout as logoutRedux } from "../../features/User/slice";
 import { User } from "../../features/types";
+import { toast } from "react-toastify";
 
 const HeaderWrapper = styled.div`
   position: fixed;
@@ -113,7 +113,7 @@ const Header: FunctionComponent<RouteComponentProps> = ({ history }) => {
       console.log(e);
     } finally {
       setLoading(false);
-      setToast(LOGIN, "Successfully logged out");
+      toast("Successfully logged out", { position: "top-center", type: "info" });
       history.push("/home/login");
     }
   };
